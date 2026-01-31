@@ -30,24 +30,26 @@ def extract_test_cases(filename):
     in_code_block = False
     
     for line in lines:
-        if line.strip().startswith("### "):
+        # Check for code block toggle FIRST
+        if line.strip().startswith("```"):
+            in_code_block = not in_code_block
+            continue  # Don't include the backticks
+
+        # If inside a code block, just add the line to email content
+        elif in_code_block:
+            current_email_lines.append(line)
+
+        # Only check for test case headers when NOT in a code block
+        elif line.strip().startswith("### "):
             # Save previous case if exists
             if current_title and current_email_lines:
                 test_cases.append({
                     "title": current_title,
                     "email": "\n".join(current_email_lines).strip()
                 })
-            
+
             current_title = line.strip().replace("### ", "")
             current_email_lines = []
-            in_code_block = False
-        
-        elif line.strip().startswith("```"):
-            in_code_block = not in_code_block
-            continue # Don't include the backticks
-            
-        elif in_code_block:
-            current_email_lines.append(line)
 
     # Add last one
     if current_title and current_email_lines:
@@ -72,7 +74,7 @@ def test_parsing():
         
         try:
             payload = {"email_text": case["email"]}
-            response = requests.post(API_URL, json=payload, timeout=30)
+            response = requests.post(API_URL, json=payload, timeout=60)
             
             if response.status_code == 200:
                 data = response.json()
