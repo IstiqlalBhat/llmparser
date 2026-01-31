@@ -2,16 +2,15 @@ import os
 import json
 import google.generativeai as genai
 from app.schemas import PurchaseOrder
-from dotenv import load_dotenv
+from app.core.config import get_settings
 
-load_dotenv()
+settings = get_settings()
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-if API_KEY:
-    genai.configure(api_key=API_KEY)
+if settings.GEMINI_API_KEY:
+    genai.configure(api_key=settings.GEMINI_API_KEY)
 
 # User requested gemini-3-flash-preview
-model = genai.GenerativeModel('gemini-3-flash-preview')
+model = genai.GenerativeModel(settings.GEMINI_MODEL_NAME)
 
 PROMPT_TEMPLATE = """
 You are an intelligent Purchase Order extraction assistant.
@@ -31,7 +30,7 @@ Return ONLY valid JSON. Do not include markdown formatting like ```json.
 """
 
 async def parse_email_with_gemini(email_text: str) -> PurchaseOrder:
-    if not API_KEY:
+    if not settings.GEMINI_API_KEY:
         raise Exception("GEMINI_API_KEY is not set")
     
     try:

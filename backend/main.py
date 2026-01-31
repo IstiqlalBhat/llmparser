@@ -1,16 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 from app.routes import orders
+from app.core.config import get_settings
 
-load_dotenv()
+settings = get_settings()
 
-app = FastAPI(title="Interview API")
+app = FastAPI(title=settings.PROJECT_NAME)
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

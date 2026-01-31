@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Loader2, Sparkles, Check, X } from "lucide-react";
 import { PurchaseOrder } from "@/types";
 import { Badge } from "@/components/ui/badge";
+import { api } from "@/lib/api";
 
 interface EmailParserProps {
     onOrderParsed: (order: PurchaseOrder) => void;
@@ -26,18 +27,8 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
         setParsedOrder(null);
 
         try {
-            const response = await fetch("http://localhost:8000/api/orders/parse", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email_text: emailText }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to parse email. Please try again.");
-            }
-
-            const data = await response.json();
-            setParsedOrder(data.parsed_data);
+            const result = await api.orders.parseEmail(emailText);
+            setParsedOrder(result);
         } catch (err) {
             setError(err instanceof Error ? err.message : "An error occurred");
         } finally {
