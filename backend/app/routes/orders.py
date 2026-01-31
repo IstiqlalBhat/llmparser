@@ -1,0 +1,30 @@
+from fastapi import APIRouter, HTTPException
+from typing import List
+from app.schemas import PurchaseOrder, EmailParsingRequest, EmailParsingResponse, OrderStatus
+from app.services.db import db
+from app.services.gemini_service import parse_email_with_gemini
+
+router = APIRouter()
+
+@router.get("/orders", response_model=List[PurchaseOrder])
+async def get_orders():
+    return db.get_all()
+
+@router.post("/orders", response_model=PurchaseOrder)
+async def create_order(order: PurchaseOrder):
+    return db.add(order)
+
+@router.post("/orders/parse", response_model=EmailParsingResponse)
+async def parse_email(request: EmailParsingRequest):
+    try:
+        parsed_order = await parse_email_with_gemini(request.email_text)
+        return EmailParsingResponse(parsed_data=parsed_order)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.patch("/orders/{po_id}/status", response_model=PurchaseOrder)
+async def update_status(po_id: str, status: OrderStatus):
+    updated = db.update_status(po_id, status)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return updated
