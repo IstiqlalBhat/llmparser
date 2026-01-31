@@ -39,14 +39,29 @@ export const api = {
             return handleResponse<PurchaseOrder>(res);
         },
 
-        parseEmail: async (emailText: string): Promise<PurchaseOrder> => {
+        parseEmail: async (emailText: string): Promise<EmailParsingResponse> => {
             const res = await fetch(`${API_BASE_URL}/orders/parse`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email_text: emailText }),
             });
-            const data = await handleResponse<EmailParsingResponse>(res);
-            return data.parsed_data;
+            return handleResponse<EmailParsingResponse>(res);
+        },
+
+        delete: async (id: string): Promise<void> => {
+            const res = await fetch(`${API_BASE_URL}/orders/${id}`, {
+                method: "DELETE",
+            });
+            await handleResponse(res);
+        },
+
+        deleteMany: async (ids: string[]): Promise<{ deleted_count: number }> => {
+            const res = await fetch(`${API_BASE_URL}/orders/delete-many`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(ids),
+            });
+            return handleResponse<{ deleted_count: number }>(res);
         },
     },
 };

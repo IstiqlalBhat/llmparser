@@ -26,7 +26,16 @@ def test_workflow():
         print(parse_resp.text)
         sys.exit(1)
     
-    parsed_data = parse_resp.json()["parsed_data"]
+    response_json = parse_resp.json()
+    parsed_list = response_json["parsed_data"]
+    
+    if not parsed_list:
+        print("FAILED: No orders parsed")
+        if "errors" in response_json and response_json["errors"]:
+            print(f"Errors: {response_json['errors']}")
+        sys.exit(1)
+        
+    parsed_data = parsed_list[0]
     print(f"SUCCESS: Parsed PO {parsed_data['id']} from {parsed_data['supplier']}")
     print(json.dumps(parsed_data, indent=2))
 

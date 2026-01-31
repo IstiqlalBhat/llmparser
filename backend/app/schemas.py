@@ -21,4 +21,5 @@ class EmailParsingRequest(BaseModel):
     email_text: str
 
 class EmailParsingResponse(BaseModel):
-    parsed_data: PurchaseOrder
+    parsed_data: List[PurchaseOrder]
+    errors: List[str] = Field(default_factory=list, description="List of errors for emails that failed to parse")

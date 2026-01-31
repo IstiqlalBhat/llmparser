@@ -14,5 +14,6 @@ export interface EmailParsingRequest {
 }
 
 export interface EmailParsingResponse {
-  parsed_data: PurchaseOrder;
+  parsed_data: PurchaseOrder[];
+  errors: string[];
 }
