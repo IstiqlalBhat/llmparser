@@ -60,12 +60,48 @@ export function useOrders() {
         }
     };
 
+    const deleteOrder = async (id: string) => {
+        const previousOrders = [...orders];
+
+        // Optimistic update
+        setOrders((current) => current.filter((o) => o.id !== id));
+
+        try {
+            await api.orders.delete(id);
+            toast.success("Order deleted successfully");
+        } catch (err) {
+            // Revert on failure
+            setOrders(previousOrders);
+            console.error(err);
+            toast.error("Failed to delete order");
+        }
+    };
+
+    const deleteOrders = async (ids: string[]) => {
+        const previousOrders = [...orders];
+
+        // Optimistic update
+        setOrders((current) => current.filter((o) => !ids.includes(o.id)));
+
+        try {
+            const result = await api.orders.deleteMany(ids);
+            toast.success(`${result.deleted_count} order(s) deleted successfully`);
+        } catch (err) {
+            // Revert on failure
+            setOrders(previousOrders);
+            console.error(err);
+            toast.error("Failed to delete orders");
+        }
+    };
+
     return {
         orders,
         isLoading,
         error,
         addOrder,
         updateOrderStatus,
+        deleteOrder,
+        deleteOrders,
         refreshOrders: fetchOrders
     };
 }

@@ -23,19 +23,28 @@ For EACH email/purchase order found, extract:
 - expected_date: The expected delivery or ship date found in the email. Format cleanly (e.g. "Jan 15, 2024").
 - status: One of the following EXACT values: "On Track", "Product Delays", "Shipped", "Shipment Delay".
 - last_updated: The date of the email or today's date if not found. Format cleanly.
+- additional_context: ONLY include this field if there is important supplementary information such as:
+  * Reason for delays (e.g., "Delayed due to port congestion")
+  * Date changes (e.g., "Original date was Jan 10, pushed to Jan 20")
+  * Special instructions or notes
+  * Partial shipment info (e.g., "50% shipped, remaining by Feb 1")
+  * Contact person or reference numbers
+  * Any other relevant context that doesn't fit in other fields
+  If there is NO additional context worth noting, set this field to null or omit it entirely.
 
 IMPORTANT:
 - Look for email separators like "From:", "Subject:", "---", blank lines between emails, or other indicators of multiple messages.
 - If you find multiple POs/emails, return an array with ALL of them.
 - If there's only one email, still return an array with one element.
+- The additional_context should be a concise, readable summary - not raw email text.
 
 Email Content:
 \"\"\"{email_text}\"\"\"
 
 Return ONLY a valid JSON array of objects. Example format:
 [
-  {{"id": "PO-1234", "supplier": "Acme Corp", "items": "100x Widget A", "expected_date": "Jan 15, 2024", "status": "On Track", "last_updated": "Jan 10, 2024"}},
-  {{"id": "PO-5678", "supplier": "Beta Inc", "items": "50x Gadget B", "expected_date": "Jan 20, 2024", "status": "Shipped", "last_updated": "Jan 12, 2024"}}
+  {{"id": "PO-1234", "supplier": "Acme Corp", "items": "100x Widget A", "expected_date": "Jan 15, 2024", "status": "On Track", "last_updated": "Jan 10, 2024", "additional_context": null}},
+  {{"id": "PO-5678", "supplier": "Beta Inc", "items": "50x Gadget B", "expected_date": "Jan 20, 2024", "status": "Product Delays", "last_updated": "Jan 12, 2024", "additional_context": "Delayed due to manufacturing issues. Original delivery was Jan 15. Supplier contact: John Smith (john@beta.com)"}}
 ]
 
 Do not include markdown formatting like ```json. Return ONLY the JSON array.

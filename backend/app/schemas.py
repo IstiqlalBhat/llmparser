@@ -16,6 +16,7 @@ class PurchaseOrder(BaseModel):
     expected_date: Optional[str] = Field(None, description="Expected delivery/ship date (e.g., Jan 15, 2024)")
     status: OrderStatus = Field(description="Current status of the order")
     last_updated: str = Field(description="Date of last update (e.g., Jan 2, 2024)")
+    additional_context: Optional[str] = Field(None, description="Additional context like delay reasons, date changes, special notes")
 
 class EmailParsingRequest(BaseModel):
     email_text: str

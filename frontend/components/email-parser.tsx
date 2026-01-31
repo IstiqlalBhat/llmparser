@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Sparkles, Check, X, Mail, Cpu, ArrowRight, FileText, CheckCheck, Trash2 } from "lucide-react";
+import { Loader2, Sparkles, Check, X, Mail, Cpu, ArrowRight, FileText, CheckCheck, Trash2, Info } from "lucide-react";
 import { PurchaseOrder } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
@@ -278,6 +278,19 @@ function OrderCard({
             {order.items}
           </p>
         </div>
+
+        {/* Additional Context */}
+        {order.additional_context && (
+          <div>
+            <div className="flex items-center gap-1.5 mb-1">
+              <Info className="w-3 h-3 text-amber-600" />
+              <span className="text-muted-foreground text-xs">Additional Context</span>
+            </div>
+            <p className="text-sm bg-amber-50 rounded-lg p-2 border border-amber-200 text-amber-900">
+              {order.additional_context}
+            </p>
+          </div>
+        )}
 
         {/* Action buttons */}
         <div className="flex gap-2 pt-1">

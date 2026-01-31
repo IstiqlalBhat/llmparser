@@ -7,6 +7,7 @@ export interface PurchaseOrder {
   expected_date?: string;
   status: OrderStatus;
   last_updated: string;
+  additional_context?: string | null;
 }
 
 export interface EmailParsingRequest {

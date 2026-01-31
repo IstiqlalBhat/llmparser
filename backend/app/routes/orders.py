@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 from typing import List
 from app.schemas import PurchaseOrder, EmailParsingRequest, EmailParsingResponse, OrderStatus
 from app.services.db import db
@@ -44,6 +44,6 @@ async def delete_order(po_id: str):
     return {"message": f"Order {po_id} deleted successfully"}
 
 @router.post("/orders/delete-many")
-async def delete_many_orders(po_ids: List[str]):
+async def delete_many_orders(po_ids: List[str] = Body(...)):
     deleted_count = db.delete_many(po_ids)
     return {"message": f"{deleted_count} order(s) deleted successfully", "deleted_count": deleted_count}

@@ -30,4 +30,18 @@ class InMemoryDB:
             return order
         return None
 
+    def delete(self, po_id: str) -> bool:
+        order = self.get_by_id(po_id)
+        if order:
+            self._orders.remove(order)
+            return True
+        return False
+
+    def delete_many(self, po_ids: List[str]) -> int:
+        deleted_count = 0
+        for po_id in po_ids:
+            if self.delete(po_id):
+                deleted_count += 1
+        return deleted_count
+
 db = InMemoryDB()

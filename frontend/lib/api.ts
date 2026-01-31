@@ -49,7 +49,7 @@ export const api = {
         },
 
         delete: async (id: string): Promise<void> => {
-            const res = await fetch(`${API_BASE_URL}/orders/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/orders/${encodeURIComponent(id)}`, {
                 method: "DELETE",
             });
             await handleResponse(res);
