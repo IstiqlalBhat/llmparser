@@ -26,7 +26,14 @@ async def parse_email(request: EmailParsingRequest):
         if not parsed_orders and errors:
             raise HTTPException(status_code=400, detail="; ".join(errors))
 
-        return EmailParsingResponse(parsed_data=parsed_orders, errors=errors)
+        # Check which PO IDs already exist in the database
+        existing_ids = []
+        for order in parsed_orders:
+            existing_order = await db.get_by_id(order.id)
+            if existing_order:
+                existing_ids.append(order.id)
+
+        return EmailParsingResponse(parsed_data=parsed_orders, errors=errors, existing_ids=existing_ids)
     except HTTPException:
         raise
     except Exception as e:

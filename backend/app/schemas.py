@@ -24,3 +24,4 @@ class EmailParsingRequest(BaseModel):
 class EmailParsingResponse(BaseModel):
     parsed_data: List[PurchaseOrder]
     errors: List[str] = Field(default_factory=list, description="List of errors for emails that failed to parse")
+    existing_ids: List[str] = Field(default_factory=list, description="List of PO IDs that already exist in the database")
