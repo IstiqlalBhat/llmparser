@@ -6,13 +6,16 @@ from app.services.gemini_service import parse_email_with_gemini
 
 router = APIRouter()
 
+
 @router.get("/orders", response_model=List[PurchaseOrder])
 async def get_orders():
-    return db.get_all()
+    return await db.get_all()
+
 
 @router.post("/orders", response_model=PurchaseOrder)
 async def create_order(order: PurchaseOrder):
-    return db.add(order)
+    return await db.add(order)
+
 
 @router.post("/orders/parse", response_model=EmailParsingResponse)
 async def parse_email(request: EmailParsingRequest):
@@ -29,21 +32,24 @@ async def parse_email(request: EmailParsingRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.patch("/orders/{po_id}/status", response_model=PurchaseOrder)
 async def update_status(po_id: str, status: OrderStatus):
-    updated = db.update_status(po_id, status)
+    updated = await db.update_status(po_id, status)
     if not updated:
         raise HTTPException(status_code=404, detail="Order not found")
     return updated
 
+
 @router.delete("/orders/{po_id}")
 async def delete_order(po_id: str):
-    deleted = db.delete(po_id)
+    deleted = await db.delete(po_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Order not found")
     return {"message": f"Order {po_id} deleted successfully"}
 
+
 @router.post("/orders/delete-many")
 async def delete_many_orders(po_ids: List[str] = Body(...)):
-    deleted_count = db.delete_many(po_ids)
+    deleted_count = await db.delete_many(po_ids)
     return {"message": f"{deleted_count} order(s) deleted successfully", "deleted_count": deleted_count}

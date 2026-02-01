@@ -9,6 +9,7 @@ A full-stack application for managing Purchase Orders (POs) from supplier emails
 - **Status Tracking** - Track orders through: On Track, Product Delays, Shipped, Shipment Delay
 - **Search & Filter** - Find orders by PO ID, supplier, or status
 - **Real-time Updates** - Update PO status manually as orders progress
+- **PostgreSQL Database** - Production-ready with optimized indexes for fast retrieval
 
 ## Project Structure
 
@@ -23,6 +24,9 @@ lumari_interview-main/
 │   │   ├── routes/         # API endpoints
 │   │   ├── services/       # Business logic (Gemini AI, database)
 │   │   └── schemas.py      # Pydantic models
+│   ├── database/           # SQL schema and reset scripts
+│   │   ├── schema.sql      # PostgreSQL schema with indexes
+│   │   └── reset.sql       # Database reset script
 │   ├── main.py             # App entrypoint
 │   └── requirements.txt    # Python dependencies
 ├── frontend/               # Next.js frontend
@@ -32,7 +36,7 @@ lumari_interview-main/
 │   ├── hooks/              # Custom React hooks
 │   ├── lib/                # Utilities
 │   └── types/              # TypeScript types
-└── tests/                  # Test files(edge cases)(no emails look like this)
+└── tests/                  # Test files
     ├── test_emails.md      # Sample email test cases
     ├── test_parsing.py     # Parsing benchmark script
     └── verify_workflow.py  # E2E workflow verification
@@ -41,9 +45,9 @@ lumari_interview-main/
 ## Tech Stack
 
 - **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui
-- **Backend**: Python, FastAPI, uvicorn
+- **Backend**: Python, FastAPI, uvicorn, asyncpg
 - **AI**: Google Gemini API for email parsing
-- **Database**: In-memory (for simplicity)
+- **Database**: PostgreSQL (Supabase compatible)
 
 ## Environment Setup
 
@@ -53,59 +57,44 @@ lumari_interview-main/
 cp .env.example .env
 ```
 
-2. Edit `.env` and add your Gemini API key:
+2. Edit `.env` and configure:
 
 ```env
-GEMINI_API_KEY=your_actual_api_key_here
+# Gemini API Key (required)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# PostgreSQL Database (required)
+# For Supabase: Use the Transaction pooler connection string (port 6543)
+DATABASE_URL=postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
 ```
 
-> **Note:** Get your API key from [Google AI Studio](https://aistudio.google.com/)
+> **Note:** Get your Gemini API key from [Google AI Studio](https://aistudio.google.com/)
 
-## Running with Docker (Recommended)
+## Database Setup
 
-The easiest way to run the application is using Docker Compose.
+### Using Supabase (Recommended)
 
-### Prerequisites
+1. Create a new project at [supabase.com](https://supabase.com)
 
-- [Docker](https://docs.docker.com/get-docker/) installed
-- [Docker Compose](https://docs.docker.com/compose/install/) installed (included with Docker Desktop)
+2. Go to **Project Settings > Database** and copy the connection string (use "Transaction pooler" mode for best performance with PgBouncer)
 
-### Quick Start
+3. Run the schema in the Supabase SQL Editor:
+   - Open `backend/database/schema.sql`
+   - Paste and run in **SQL Editor > New Query**
 
-1. Ensure your `.env` file is configured with your Gemini API key (see Environment Setup above)
+### Local PostgreSQL
 
-2. Build and start all services:
-
+1. Create a database:
 ```bash
-docker-compose up --build
+createdb po_management
 ```
 
-3. Access the application:
-   - **Frontend**: http://localhost:3000
-   - **Backend API**: http://localhost:8000
-
-### Docker Commands
-
+2. Run the schema:
 ```bash
-# Start services in background (detached mode)
-docker-compose up -d --build
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-
-# Rebuild and restart a specific service
-docker-compose up -d --build backend
-docker-compose up -d --build frontend
+psql -d po_management -f backend/database/schema.sql
 ```
 
----
-
-## Manual Installation (Alternative)
-
-If you prefer to run without Docker, follow these steps.
+## Running the Application
 
 ### Backend
 
@@ -114,33 +103,43 @@ cd backend
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+uvicorn main:app --reload
 ```
+
+Backend runs on http://localhost:8000
 
 ### Frontend
 
 ```bash
 cd frontend
 npm install
-```
-
-### Start Backend
-
-```bash
-cd backend
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-uvicorn main:app --reload
-```
-
-Backend runs on http://localhost:8000
-
-### Start Frontend
-
-```bash
-cd frontend
 npm run dev
 ```
 
 Frontend runs on http://localhost:3000
+
+## Database Performance
+
+The schema includes optimized indexes for fast retrieval:
+
+| Index | Purpose |
+|-------|---------|
+| `po_id` (unique) | O(log n) lookups by PO ID |
+| `status` | Fast "show all Shipped" queries |
+| `supplier` | Fast supplier filtering |
+| `(status, supplier)` | Combined filter optimization |
+| `items` (GIN trigram) | Fast text search with `LIKE '%widget%'` |
+| `created_at`, `updated_at` | Fast ordering by date |
+
+### Reset Database
+
+To reset the database (drops all data):
+
+```bash
+psql -d po_management -f backend/database/reset.sql
+```
+
+Or in Supabase SQL Editor, paste and run `reset.sql`.
 
 ## Sample Email Formats
 

@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     GEMINI_MODEL_NAME: str = "gemini-2.0-flash"
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     
+    # PostgreSQL / Supabase Database Settings
+    DATABASE_URL: str  # Required: postgresql://user:pass@host:port/db
+    DATABASE_POOL_MIN: int = 2
+    DATABASE_POOL_MAX: int = 10
+    
     class Config:
         env_file = str(PROJECT_ROOT / ".env")
 
