@@ -70,7 +70,7 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center glow-sm">
                   <Layers className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-xs font-bold tracking-[0.25em] uppercase text-primary/90">
+                <span className="text-sm font-bold tracking-[0.2em] uppercase text-sky-700 drop-shadow-sm">
                   Supply Chain Intelligence
                 </span>
               </div>
@@ -84,7 +84,7 @@ export default function Home() {
               </h1>
 
               {/* Subtitle */}
-              <p className="mt-5 text-foreground/70 text-lg lg:text-xl leading-relaxed text-balance max-w-xl">
+              <p className="mt-5 text-slate-600 text-lg lg:text-xl leading-relaxed text-balance max-w-xl">
                 AI-powered purchase order management. Parse supplier emails, track shipments,
                 and stay ahead of delays with intelligent automation.
               </p>
@@ -162,9 +162,9 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-20 pt-8 border-t border-border/50">
+        <footer className="mt-20 pt-8 border-t border-slate-200/60">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-            <p className="flex items-center gap-3 text-muted-foreground">
+            <p className="flex items-center gap-3 text-slate-500">
               <span className="font-semibold sky-gradient" style={{ fontFamily: "var(--font-display)" }}>
                 Orbital
               </span>
@@ -220,7 +220,7 @@ function StatCard({
             <span className={color}>{icon}</span>
           </div>
           <div className="min-w-0 flex flex-col">
-            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider truncate">
+            <p className="text-[11px] text-slate-600 font-bold uppercase tracking-wide truncate">
               {label}
             </p>
             <p
@@ -238,12 +238,12 @@ function StatCard({
 
 function SystemStatus() {
   return (
-    <div className="flex items-center gap-2.5 px-4 py-2 rounded-full glass-surface border border-emerald-500/30">
+    <div className="flex items-center gap-2.5 px-4 py-2 rounded-full glass-surface border border-emerald-500/40">
       <span className="relative flex h-2.5 w-2.5">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
       </span>
-      <span className="text-emerald-400 text-xs font-semibold tracking-wide">
+      <span className="text-emerald-600 text-xs font-semibold tracking-wide">
         System Operational
       </span>
     </div>

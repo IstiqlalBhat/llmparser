@@ -183,7 +183,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                 >
                                     Purchase Orders
                                 </h2>
-                                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground mt-0.5">
+                                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
                                     <span>{filteredOrders.length} orders</span>
                                     {selectedIds.size > 0 && (
                                         <>
@@ -259,7 +259,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 {/* Table Content */}
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     {/* Table header */}
-                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3 glass-surface border-b border-border/30 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-50/80 border-b border-slate-200/60 text-xs font-bold text-slate-600 uppercase tracking-wide">
                         <div className="col-span-1 flex items-center">
                             <Checkbox
                                 checked={isAllSelected}

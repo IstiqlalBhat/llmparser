@@ -159,7 +159,7 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
                         >
                             Email Parser
                         </h2>
-                        <p className="text-xs text-muted-foreground mt-0.5">
+                        <p className="text-xs text-slate-500 font-medium mt-0.5">
                             AI-powered document processing
                         </p>
                     </div>
