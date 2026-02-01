@@ -36,9 +36,9 @@ export default function Home() {
         toastOptions={{
           className: "warm-card",
           style: {
-            background: "#FFFFFF",
-            border: "1px solid #E5DDD5",
-            color: "#1C1512",
+            background: "#242019",
+            border: "1px solid #3D352E",
+            color: "#F2EBE6",
           },
         }}
       />
@@ -77,29 +77,29 @@ export default function Home() {
                 icon={<TrendingUp className="w-4 h-4" />}
                 label="On Track"
                 value={onTrackOrders}
-                color="text-emerald-700"
-                bgColor="bg-emerald-100"
+                color="text-emerald-400"
+                bgColor="bg-emerald-950/60"
               />
               <StatCard
                 icon={<Zap className="w-4 h-4" />}
                 label="Shipped"
                 value={shippedOrders}
-                color="text-blue-700"
-                bgColor="bg-blue-100"
+                color="text-sky-400"
+                bgColor="bg-sky-950/60"
               />
               <StatCard
                 icon={<AlertTriangle className="w-4 h-4" />}
                 label="Product"
                 value={productDelays}
-                color="text-amber-700"
-                bgColor="bg-amber-100"
+                color="text-amber-400"
+                bgColor="bg-amber-950/60"
               />
               <StatCard
                 icon={<Clock className="w-4 h-4" />}
                 label="Shipment"
                 value={shipmentDelays}
-                color="text-red-700"
-                bgColor="bg-red-100"
+                color="text-rose-400"
+                bgColor="bg-rose-950/60"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export default function Home() {
               <span>&mdash;</span>
               <span>Intelligent supply chain management</span>
             </p>
-            <p className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+            <p className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/50 border border-emerald-800/50 text-emerald-400 text-xs font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               System Operational
             </p>

@@ -58,31 +58,31 @@ const ALL_STATUSES = "all";
 const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; bgColor: string; borderColor: string; lightBg: string }> = {
     "On Track": {
         icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-        color: "text-emerald-700",
-        bgColor: "bg-emerald-100",
-        borderColor: "border-emerald-200",
-        lightBg: "bg-emerald-50/50",
+        color: "text-emerald-400",
+        bgColor: "bg-emerald-900/50",
+        borderColor: "border-emerald-700/50",
+        lightBg: "bg-emerald-950/40",
     },
     "Shipped": {
         icon: <Truck className="w-3.5 h-3.5" />,
-        color: "text-blue-700",
-        bgColor: "bg-blue-100",
-        borderColor: "border-blue-200",
-        lightBg: "bg-blue-50/50",
+        color: "text-sky-400",
+        bgColor: "bg-sky-900/50",
+        borderColor: "border-sky-700/50",
+        lightBg: "bg-sky-950/40",
     },
     "Product Delays": {
         icon: <AlertTriangle className="w-3.5 h-3.5" />,
-        color: "text-amber-700",
-        bgColor: "bg-amber-100",
-        borderColor: "border-amber-200",
-        lightBg: "bg-amber-50/50",
+        color: "text-amber-400",
+        bgColor: "bg-amber-900/50",
+        borderColor: "border-amber-700/50",
+        lightBg: "bg-amber-950/40",
     },
     "Shipment Delay": {
         icon: <Clock className="w-3.5 h-3.5" />,
-        color: "text-red-700",
-        bgColor: "bg-red-100",
-        borderColor: "border-red-200",
-        lightBg: "bg-red-50/50",
+        color: "text-rose-400",
+        bgColor: "bg-rose-900/50",
+        borderColor: "border-rose-700/50",
+        lightBg: "bg-rose-950/40",
     },
 };
 
@@ -198,7 +198,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                     variant="outline"
                                     size="sm"
                                     onClick={handleBulkDeleteClick}
-                                    className="border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 w-full sm:w-auto h-10 sm:h-9"
+                                    className="border-rose-800/50 text-rose-400 hover:bg-rose-950/50 hover:border-rose-700/50 w-full sm:w-auto h-10 sm:h-9"
                                 >
                                     <Trash2 className="w-4 h-4 mr-2" />
                                     Delete ({selectedIds.size})
@@ -314,8 +314,8 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 <DialogContent className="sm:max-w-md bg-card/95 backdrop-blur-xl border-border">
                     <DialogHeader>
                         <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
-                                <AlertCircle className="w-6 h-6 text-red-600" />
+                            <div className="w-12 h-12 rounded-full bg-rose-950/60 flex items-center justify-center flex-shrink-0">
+                                <AlertCircle className="w-6 h-6 text-rose-400" />
                             </div>
                             <div>
                                 <DialogTitle className="text-xl">Delete Order?</DialogTitle>
@@ -327,7 +327,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                     </DialogHeader>
 
                     {orderToDelete && (
-                        <div className="rounded-xl border border-border bg-secondary/20 p-4 space-y-3 my-2">
+                        <div className="rounded-xl border border-border bg-secondary/40 p-4 space-y-3 my-2">
                             <div className="flex items-center justify-between">
                                 <span className="font-mono text-sm font-semibold text-foreground">
                                     {orderToDelete.id}
@@ -352,7 +352,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         <Button
                             variant="destructive"
                             onClick={handleConfirmDelete}
-                            className="w-full sm:w-auto bg-red-600 hover:bg-red-700 rounded-xl shadow-lg shadow-red-600/20"
+                            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-600/30"
                         >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete Order
@@ -365,8 +365,8 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 <DialogContent className="sm:max-w-lg bg-card/95 backdrop-blur-xl border-border">
                     <DialogHeader>
                         <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
-                                <AlertCircle className="w-6 h-6 text-red-600" />
+                            <div className="w-12 h-12 rounded-full bg-rose-950/60 flex items-center justify-center flex-shrink-0">
+                                <AlertCircle className="w-6 h-6 text-rose-400" />
                             </div>
                             <div>
                                 <DialogTitle className="text-xl">Delete {selectedIds.size} Orders?</DialogTitle>
@@ -381,7 +381,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         {selectedOrders.map((order) => (
                             <div
                                 key={order.id}
-                                className="rounded-lg border border-border bg-secondary/10 p-3 flex items-center justify-between"
+                                className="rounded-lg border border-border bg-secondary/30 p-3 flex items-center justify-between"
                             >
                                 <span className="font-mono text-sm font-medium text-foreground">
                                     {order.id}
@@ -404,7 +404,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         <Button
                             variant="destructive"
                             onClick={handleConfirmBulkDelete}
-                            className="w-full sm:w-auto bg-red-600 hover:bg-red-700 rounded-xl shadow-lg shadow-red-600/20"
+                            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-600/30"
                         >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete {selectedIds.size} Orders
