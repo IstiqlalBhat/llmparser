@@ -41,12 +41,14 @@ import {
     AlertCircle,
     Info,
     FileText,
+    Pencil,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface POTableProps {
     orders: PurchaseOrder[];
     onStatusUpdate: (id: string, status: OrderStatus) => void;
+    onEdit: (order: PurchaseOrder) => void;
     onDelete: (id: string) => void;
     onDeleteMany: (ids: string[]) => void;
 }
@@ -84,7 +86,7 @@ const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; 
     },
 };
 
-export function POTable({ orders, onStatusUpdate, onDelete, onDeleteMany }: POTableProps) {
+export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany }: POTableProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<string>(ALL_STATUSES);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -253,7 +255,7 @@ export function POTable({ orders, onStatusUpdate, onDelete, onDeleteMany }: POTa
                 {/* Table Content */}
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     {/* Table header */}
-                    <div className="hidden lg:grid lg:grid-cols-13 gap-4 px-6 py-3 bg-secondary/30 border-b border-border/50 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">
+                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3 bg-secondary/30 border-b border-border/50 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">
                         <div className="col-span-1 flex items-center">
                             <Checkbox
                                 checked={isAllSelected}
@@ -267,7 +269,7 @@ export function POTable({ orders, onStatusUpdate, onDelete, onDeleteMany }: POTa
                         <div className="col-span-3">Items</div>
                         <div className="col-span-2">Expected</div>
                         <div className="col-span-2">Status</div>
-                        <div className="col-span-1">Actions</div>
+                        <div className="col-span-2">Actions</div>
                     </div>
 
                     {/* Table body */}
@@ -297,6 +299,7 @@ export function POTable({ orders, onStatusUpdate, onDelete, onDeleteMany }: POTa
                                         isSelected={selectedIds.has(order.id)}
                                         onToggleSelect={() => toggleSelect(order.id)}
                                         onStatusUpdate={onStatusUpdate}
+                                        onEdit={() => onEdit(order)}
                                         onDelete={() => handleDeleteClick(order)}
                                     />
                                 ))}
@@ -418,12 +421,14 @@ function OrderRow({
     isSelected,
     onToggleSelect,
     onStatusUpdate,
+    onEdit,
     onDelete,
 }: {
     order: PurchaseOrder;
     isSelected: boolean;
     onToggleSelect: () => void;
     onStatusUpdate: (id: string, status: OrderStatus) => void;
+    onEdit: () => void;
     onDelete: () => void;
 }) {
     const config = statusConfig[order.status as OrderStatus];
@@ -431,7 +436,7 @@ function OrderRow({
     return (
         <div className={`group px-4 py-3 sm:px-6 sm:py-4 transition-all duration-200 border-l-2 ${isSelected ? 'bg-primary/5 border-l-primary' : 'hover:bg-secondary/30 border-l-transparent'}`}>
             {/* Desktop layout */}
-            <div className="hidden lg:grid lg:grid-cols-13 gap-4 items-center">
+            <div className="hidden lg:grid lg:grid-cols-14 gap-4 items-center">
                 {/* Checkbox */}
                 <div className="col-span-1">
                     <Checkbox
@@ -499,7 +504,7 @@ function OrderRow({
                 </div>
 
                 {/* Actions */}
-                <div className="col-span-1 flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                <div className="col-span-2 flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                     {order.additional_context && (
                         <Popover>
                             <PopoverTrigger asChild>
@@ -524,6 +529,14 @@ function OrderRow({
                             </PopoverContent>
                         </Popover>
                     )}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onEdit}
+                        className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg"
+                    >
+                        <Pencil className="w-4 h-4" />
+                    </Button>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -560,8 +573,16 @@ function OrderRow({
                         <Button
                             variant="ghost"
                             size="icon"
+                            onClick={onEdit}
+                            className="h-8 w-8 text-muted-foreground/70 hover:text-primary hover:bg-primary/10 rounded-lg touch-manipulation"
+                        >
+                            <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={onDelete}
-                            className="h-8 w-8 text-muted-foreground/70 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                            className="h-8 w-8 text-muted-foreground/70 hover:text-red-600 hover:bg-red-50 rounded-lg touch-manipulation"
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -581,12 +602,12 @@ function OrderRow({
                         {order.expected_date || "No date"}
                     </div>
 
-                    <div className="flex-1 max-w-[160px]">
+                    <div className="flex-1 max-w-[160px] relative z-10">
                         <Select
                             defaultValue={order.status}
                             onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
                         >
-                            <SelectTrigger className={`w-full h-8 text-xs ${config.lightBg} ${config.borderColor} border rounded-lg`}>
+                            <SelectTrigger className={`w-full h-9 text-xs ${config.lightBg} ${config.borderColor} border rounded-lg touch-manipulation`}>
                                 <div className="flex items-center gap-1.5 overflow-hidden">
                                     <div className={`p-0.5 rounded-full ${config.bgColor}`}>
                                         {config.icon}
@@ -594,9 +615,13 @@ function OrderRow({
                                     <span className={`font-semibold truncate ${config.color}`}>{order.status}</span>
                                 </div>
                             </SelectTrigger>
-                            <SelectContent className="bg-card/95 backdrop-blur-md border-border rounded-xl">
+                            <SelectContent
+                                className="bg-card/95 backdrop-blur-md border-border rounded-xl z-[100]"
+                                position="popper"
+                                sideOffset={4}
+                            >
                                 {Object.entries(statusConfig).map(([status, cfg]) => (
-                                    <SelectItem key={status} value={status}>
+                                    <SelectItem key={status} value={status} className="touch-manipulation">
                                         <span className={cfg.color}>{status}</span>
                                     </SelectItem>
                                 ))}

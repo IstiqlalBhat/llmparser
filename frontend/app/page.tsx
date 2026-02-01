@@ -1,13 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import { EmailParser } from "@/components/email-parser";
 import { POTable } from "@/components/po-table";
+import { EditOrderDialog } from "@/components/edit-order-dialog";
 import { Toaster } from "sonner";
 import { useOrders } from "@/hooks/use-orders";
 import { Package, Zap, TrendingUp, Clock, Sun, AlertTriangle } from "lucide-react";
+import { PurchaseOrder } from "@/types";
 
 export default function Home() {
   const { orders, isLoading, addOrder, updateOrderStatus, deleteOrder, deleteOrders } = useOrders();
+  const [editingOrder, setEditingOrder] = useState<PurchaseOrder | null>(null);
+
+  const handleEditOrder = (order: PurchaseOrder) => {
+    setEditingOrder(order);
+  };
+
+  const handleSaveEdit = async (order: PurchaseOrder) => {
+    await addOrder(order); // addOrder handles both create and update
+    setEditingOrder(null);
+  };
 
   // Calculate stats
   const totalOrders = orders.length;
@@ -107,6 +120,7 @@ export default function Home() {
               <POTable
                 orders={orders}
                 onStatusUpdate={updateOrderStatus}
+                onEdit={handleEditOrder}
                 onDelete={deleteOrder}
                 onDeleteMany={deleteOrders}
               />
@@ -129,6 +143,15 @@ export default function Home() {
           </div>
         </footer>
       </div>
+
+      {/* Edit Order Dialog */}
+      <EditOrderDialog
+        open={!!editingOrder}
+        onOpenChange={(open) => !open && setEditingOrder(null)}
+        order={editingOrder}
+        onSave={handleSaveEdit}
+        title="Edit Order"
+      />
     </main>
   );
 }
@@ -139,27 +162,22 @@ function StatCard({
   value,
   color,
   bgColor,
-  delay
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   color: string;
   bgColor: string;
-  delay?: string;
 }) {
   return (
-    <div
-      className="glass-panel glass-card-hover rounded-xl p-4 cursor-default group border-orange-100/50"
-      style={{ animationDelay: delay }}
-    >
+    <div className="warm-card glass-card-hover p-4 cursor-default group">
       <div className="flex flex-row items-center gap-3">
-        <div className={`w-10 h-10 rounded-lg ${bgColor} flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110 duration-300`}>
+        <div className={`w-10 h-10 rounded-lg ${bgColor} flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 duration-200`}>
           <span className={color}>{icon}</span>
         </div>
         <div className="min-w-0 flex flex-col">
-          <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider truncate">{label}</p>
-          <p className={`text-2xl font-bold ${color} leading-none mt-1`} style={{ fontFamily: "var(--font-display)" }}>
+          <p className="text-[11px] text-muted-foreground font-bold uppercase tracking-wider truncate">{label}</p>
+          <p className={`text-2xl font-bold ${color} leading-none mt-0.5`} style={{ fontFamily: "var(--font-display)" }}>
             {value}
           </p>
         </div>

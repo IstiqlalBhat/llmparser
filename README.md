@@ -1,99 +1,67 @@
-# Interview Challenge: Purchase Order Management System
+# Purchase Order Management System
 
-Build a simple but functional PO (Purchase Order) management system that helps track orders from suppliers.
+A full-stack application for managing Purchase Orders (POs) from supplier emails using AI-powered parsing.
 
-## Problem Statement
+## Features
 
-You receive emails from various suppliers with PO updates. You need a system to:
-1. Parse and store PO information from pasted emails
-2. Track PO status throughout the fulfillment lifecycle
-3. Monitor delays and issues
+- **AI-Powered Email Parsing** - Paste supplier emails and extract PO details automatically using Gemini AI
+- **Manual Order Entry** - Create and edit orders manually when automatic parsing fails
+- **Status Tracking** - Track orders through: On Track, Product Delays, Shipped, Shipment Delay
+- **Search & Filter** - Find orders by PO ID, supplier, or status
+- **Real-time Updates** - Update PO status manually as orders progress
 
-## Requirements
+## Project Structure
 
-### Core Features
-
-1. **Email Parsing**
-   - Paste supplier emails into a text area
-   - Extract PO ID, supplier name, items, dates, and status information
-   - Handle multiple email formats gracefully
-
-2. **PO Status Tracking**
-   - Track each PO with one of these statuses:
-     - `On Track` - Order is progressing normally
-     - `Product Delays` - Manufacturing/production issues
-     - `Shipped` - Order has been dispatched
-     - `Shipment Delay` - Logistics/shipping issues
-
-3. **PO Management**
-   - View all POs in a dashboard
-   - Filter/search by PO ID, supplier, or status
-   - Update PO status manually
-
-### Example Dashboard Table
-
-Your PO dashboard should display data similar to this:
-
-| PO ID | Supplier | Items | Expected Date | Status | Last Updated |
-|-------|----------|-------|---------------|--------|--------------|
-| PO-45821 | Acme Supplies | 500x Widget A, 200x Widget B | Jan 15, 2024 | On Track | Jan 2, 2024 |
-| GT2024-0012 | GlobalTech Logistics | 100x Model X, 50x Model Y | Jan 10, 2024 | Shipped | Jan 10, 2024 |
-| PO12345 | MegaCorp International | 300x Component Z | Feb 5, 2024 | Product Delays | Jan 8, 2024 |
-| PO-8821 | FastShip Co | 1000x Parts Kit | Jan 20, 2024 | Shipment Delay | Jan 18, 2024 |
-| PO-2024-001 | TechParts Inc | 100x Circuit Board | Feb 10, 2024 | On Track | Jan 5, 2024 |
-
+```
+lumari_interview-main/
+├── .env                    # Environment variables (create from .env.example)
+├── .env.example            # Environment template
+├── README.md
+├── backend/                # FastAPI backend
+│   ├── app/
+│   │   ├── core/           # Configuration
+│   │   ├── routes/         # API endpoints
+│   │   ├── services/       # Business logic (Gemini AI, database)
+│   │   └── schemas.py      # Pydantic models
+│   ├── main.py             # App entrypoint
+│   └── requirements.txt    # Python dependencies
+├── frontend/               # Next.js frontend
+│   ├── app/                # Next.js app router
+│   ├── components/         # React components
+│   │   └── ui/             # shadcn/ui components
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utilities
+│   └── types/              # TypeScript types
+└── tests/                  # Test files
+    ├── test_emails.md      # Sample email test cases
+    ├── test_parsing.py     # Parsing benchmark script
+    └── verify_workflow.py  # E2E workflow verification
+```
 
 ## Tech Stack
 
 - **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: Python, FastAPI, uvicorn
-- **Database**: in-memory for simplicity or local
+- **AI**: Google Gemini API for email parsing
+- **Database**: In-memory (for simplicity)
 
-## Sample Email Formats
+## Environment Setup
 
-```
-Subject: PO Update - PO-45821
+1. Copy the environment template:
 
-Hi,
-
-Your order PO-45821 from Acme Supplies is on track.
-
-Expected ship date: Jan 15, 2024
-Items: 500x Widget A, 200x Widget B
-
-Thanks,
-Acme Supplies Team
+```bash
+cp .env.example .env
 ```
 
-```
-From: logistics@globaltech.com
-Subject: Shipment Notification
+2. Edit `.env` and add your Gemini API key:
 
-Purchase Order: GT2024-0012
-Status: SHIPPED
-Tracking: 1Z999AA10123456784
-Ship Date: 2024-01-10
-
-Items included:
-- 100 units Model X
-- 50 units Model Y
-
-GlobalTech Logistics
+```env
+GEMINI_API_KEY=your_actual_api_key_here
 ```
 
-```
-URGENT: Production Delay - PO12345
+> **Note:** Get your API key from [Google AI Studio](https://aistudio.google.com/)
 
-Due to material shortages, we're experiencing delays on PO12345.
-
-Original delivery: Jan 20
-Revised delivery: Feb 5
-
-Supplier: MegaCorp International
-```
-
-
-## Setup
+## Installation
 
 ### Backend
 
@@ -131,3 +99,37 @@ npm run dev
 ```
 
 Frontend runs on http://localhost:3000
+
+## Sample Email Formats
+
+The system handles various email formats:
+
+```
+Subject: PO Update - PO-45821
+
+Hi,
+
+Your order PO-45821 from Acme Supplies is on track.
+
+Expected ship date: Jan 15, 2024
+Items: 500x Widget A, 200x Widget B
+
+Thanks,
+Acme Supplies Team
+```
+
+```
+From: logistics@globaltech.com
+Subject: Shipment Notification
+
+Purchase Order: GT2024-0012
+Status: SHIPPED
+Tracking: 1Z999AA10123456784
+Ship Date: 2024-01-10
+
+Items included:
+- 100 units Model X
+- 50 units Model Y
+
+GlobalTech Logistics
+```

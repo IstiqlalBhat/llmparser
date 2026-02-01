@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Dialog,
     DialogContent,
@@ -44,19 +44,26 @@ export function EditOrderDialog({
     onSave,
     title = "Edit Order",
 }: EditOrderDialogProps) {
-    // Initialize state from props. Since we conditionally render this component,
-    // this state will act as fresh initialization every time it opens.
-    const [formData, setFormData] = useState<PurchaseOrder>(
-        order || {
-            id: "",
-            supplier: "",
-            items: "",
-            expected_date: "",
-            status: "On Track",
-            last_updated: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-            additional_context: "",
+    const getDefaultOrder = (): PurchaseOrder => ({
+        id: "",
+        supplier: "",
+        items: "",
+        expected_date: "",
+        status: "On Track",
+        last_updated: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        additional_context: "",
+    });
+
+    const [formData, setFormData] = useState<PurchaseOrder>(order || getDefaultOrder());
+
+    // Reset form when order changes (when opening to edit a different order)
+    useEffect(() => {
+        if (order) {
+            setFormData(order);
+        } else {
+            setFormData(getDefaultOrder());
         }
-    );
+    }, [order]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

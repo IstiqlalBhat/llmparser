@@ -1,16 +1,21 @@
 import os
+from pathlib import Path
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+
+# Get the project root (parent of backend folder)
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "PO Management System"
     GEMINI_API_KEY: str
-    GEMINI_MODEL_NAME: str = "gemini-3-flash-preview"
+    GEMINI_MODEL_NAME: str = "gemini-2.0-flash"
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     
     class Config:
-        env_file = ".env"
+        env_file = str(PROJECT_ROOT / ".env")
 
 @lru_cache()
 def get_settings():
     return Settings()
+
