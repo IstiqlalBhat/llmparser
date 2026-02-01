@@ -17,83 +17,76 @@ export default function Home() {
   const shipmentDelays = orders.filter(o => o.status === "Shipment Delay").length;
 
   return (
-    <main className="min-h-screen warm-mesh paper-texture relative overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="fixed top-[-200px] left-[-100px] w-[600px] h-[600px] blob-1 pointer-events-none float" />
-      <div className="fixed bottom-[-150px] right-[-50px] w-[500px] h-[500px] blob-2 pointer-events-none float" style={{ animationDelay: "-3s" }} />
-
-      {/* Subtle dot pattern overlay */}
-      <div className="fixed inset-0 dot-pattern-warm opacity-30 pointer-events-none" />
-
+    <main className="min-h-screen warm-mesh relative overflow-hidden">
       <Toaster
         position="top-right"
         toastOptions={{
           className: "warm-card",
           style: {
-            background: "oklch(0.995 0.005 85)",
-            border: "1px solid oklch(0.9 0.02 75)",
-            color: "oklch(0.25 0.03 50)",
+            background: "#FFFFFF",
+            border: "1px solid #E5DDD5",
+            color: "#1C1512",
           },
         }}
       />
 
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 py-8 lg:px-12 lg:py-10">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-4 py-6 sm:px-6 lg:px-12 lg:py-10">
         {/* Header */}
-        <header className="mb-10 slide-up">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/10 flex items-center justify-center shadow-sm">
-                  <Sun className="w-6 h-6 text-primary" />
+        <header className="mb-8 lg:mb-12 slide-up">
+          <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-8">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <Sun className="w-5 h-5 text-primary" />
                 </div>
-                <span className="text-xs font-semibold tracking-[0.15em] uppercase text-primary/70">
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary">
                   Supply Chain Intelligence
                 </span>
               </div>
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-balance leading-tight" style={{ fontFamily: "var(--font-display)" }}>
                 <span className="sunrise-gradient">PO Command</span>
               </h1>
-              <p className="mt-3 text-muted-foreground text-lg max-w-lg leading-relaxed">
-                AI-powered purchase order management. Parse supplier emails, track shipments, stay ahead of delays.
+              <p className="mt-4 text-foreground/70 text-lg leading-relaxed text-balance">
+                AI-powered purchase order management. Parse supplier emails, track shipments, and stay ahead of delays with intelligent automation.
               </p>
             </div>
 
-            {/* Stats bar */}
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            {/* Stats bar - Responsive Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 w-full xl:w-auto">
               <StatCard
                 icon={<Package className="w-4 h-4" />}
                 label="Total"
                 value={totalOrders}
                 color="text-foreground"
-                bgColor="bg-secondary/50"
+                bgColor="bg-secondary"
               />
               <StatCard
                 icon={<TrendingUp className="w-4 h-4" />}
                 label="On Track"
                 value={onTrackOrders}
-                color="text-emerald-600"
-                bgColor="bg-emerald-50"
+                color="text-emerald-700"
+                bgColor="bg-emerald-100"
               />
               <StatCard
                 icon={<Zap className="w-4 h-4" />}
                 label="Shipped"
                 value={shippedOrders}
-                color="text-blue-600"
-                bgColor="bg-blue-50"
+                color="text-blue-700"
+                bgColor="bg-blue-100"
               />
               <StatCard
                 icon={<AlertTriangle className="w-4 h-4" />}
                 label="Product"
                 value={productDelays}
-                color="text-amber-600"
-                bgColor="bg-amber-50"
+                color="text-amber-700"
+                bgColor="bg-amber-100"
               />
               <StatCard
                 icon={<Clock className="w-4 h-4" />}
                 label="Shipment"
                 value={shipmentDelays}
-                color="text-red-600"
-                bgColor="bg-red-50"
+                color="text-red-700"
+                bgColor="bg-red-100"
               />
             </div>
           </div>
@@ -102,12 +95,12 @@ export default function Home() {
         {/* Main content grid */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-8">
           {/* Left Column: Email Parser */}
-          <div className="xl:col-span-4 slide-up" style={{ animationDelay: "0.1s" }}>
+          <div className="xl:col-span-4 lg:sticky lg:top-8 slide-up" style={{ animationDelay: "0.2s" }}>
             <EmailParser onOrderParsed={addOrder} />
           </div>
 
           {/* Right Column: PO Table */}
-          <div className="xl:col-span-8 slide-up" style={{ animationDelay: "0.2s" }}>
+          <div className="xl:col-span-8 slide-up" style={{ animationDelay: "0.3s" }}>
             {isLoading ? (
               <LoadingSkeleton />
             ) : (
@@ -122,16 +115,16 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-border/50">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p className="flex items-center gap-2">
-              <span className="text-primary">PO Command</span>
+        <footer className="mt-20 pt-8 border-t border-border">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
+            <p className="flex items-center gap-2 text-muted-foreground">
+              <span className="font-semibold text-primary">PO Command</span>
               <span>&mdash;</span>
               <span>Intelligent supply chain management</span>
             </p>
-            <p className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-soft" />
-              System operational
+            <p className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              System Operational
             </p>
           </div>
         </footer>
@@ -145,23 +138,28 @@ function StatCard({
   label,
   value,
   color,
-  bgColor
+  bgColor,
+  delay
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   color: string;
   bgColor: string;
+  delay?: string;
 }) {
   return (
-    <div className="warm-card rounded-xl px-3 py-3 hover-lift cursor-default">
-      <div className="flex items-center gap-2">
-        <div className={`w-8 h-8 rounded-lg ${bgColor} flex items-center justify-center flex-shrink-0`}>
+    <div
+      className="glass-panel glass-card-hover rounded-xl p-4 cursor-default group border-orange-100/50"
+      style={{ animationDelay: delay }}
+    >
+      <div className="flex flex-row items-center gap-3">
+        <div className={`w-10 h-10 rounded-lg ${bgColor} flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110 duration-300`}>
           <span className={color}>{icon}</span>
         </div>
-        <div className="min-w-0">
-          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide truncate">{label}</p>
-          <p className={`text-xl font-bold ${color}`} style={{ fontFamily: "var(--font-display)" }}>
+        <div className="min-w-0 flex flex-col">
+          <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider truncate">{label}</p>
+          <p className={`text-2xl font-bold ${color} leading-none mt-1`} style={{ fontFamily: "var(--font-display)" }}>
             {value}
           </p>
         </div>
@@ -172,17 +170,21 @@ function StatCard({
 
 function LoadingSkeleton() {
   return (
-    <div className="warm-card rounded-2xl p-6 lg:p-8 space-y-6">
+    <div className="warm-card p-6 lg:p-8 space-y-8">
       <div className="flex items-center justify-between">
-        <div className="shimmer h-8 w-48 rounded-xl" />
+        <div className="h-8 w-48 bg-muted/50 rounded-lg animate-pulse" />
         <div className="flex gap-3">
-          <div className="shimmer h-10 w-64 rounded-xl" />
-          <div className="shimmer h-10 w-40 rounded-xl" />
+          <div className="h-10 w-64 bg-muted/50 rounded-lg animate-pulse" />
+          <div className="h-10 w-32 bg-muted/50 rounded-lg animate-pulse" />
         </div>
       </div>
-      <div className="space-y-3">
+      <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="shimmer h-16 rounded-xl" style={{ animationDelay: `${i * 0.1}s` }} />
+          <div
+            key={i}
+            className="h-20 bg-muted/30 rounded-xl animate-pulse"
+            style={{ animationDelay: `${i * 0.1}s` }}
+          />
         ))}
       </div>
     </div>
