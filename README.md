@@ -32,7 +32,7 @@ lumari_interview-main/
 │   ├── hooks/              # Custom React hooks
 │   ├── lib/                # Utilities
 │   └── types/              # TypeScript types
-└── tests/                  # Test files
+└── tests/                  # Test files(edge cases)(no emails look like this)
     ├── test_emails.md      # Sample email test cases
     ├── test_parsing.py     # Parsing benchmark script
     └── verify_workflow.py  # E2E workflow verification
