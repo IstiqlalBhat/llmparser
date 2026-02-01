@@ -13,13 +13,15 @@ class Settings(BaseSettings):
     # Allow all origins for local development/mobile testing
     CORS_ORIGINS: list[str] = ["*"]
     
-    # PostgreSQL / Supabase Database Settings
-    DATABASE_URL: str  # Required: postgresql://user:pass@host:port/db
-    DATABASE_POOL_MIN: int = 2
-    DATABASE_POOL_MAX: int = 10
+    # Supabase Configuration
+    # Using NEXT_PUBLIC_SUPABASE_URL for compatibility with frontend
+    NEXT_PUBLIC_SUPABASE_URL: str
+    # Service role key for backend operations (full database access)
+    SUPABASE_SERVICE_ROLE_KEY: str
     
     class Config:
         env_file = str(PROJECT_ROOT / ".env")
+        extra = "ignore"  # Ignore extra env vars like NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 @lru_cache()
 def get_settings():

@@ -12,17 +12,16 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     """
     Application lifespan manager.
-    Initializes database connection pool on startup and closes on shutdown.
+    Initializes Supabase client on startup and cleans up on shutdown.
     """
-    # Startup: Initialize database connection pool
-    await db.connect(
-        database_url=settings.DATABASE_URL,
-        min_size=settings.DATABASE_POOL_MIN,
-        max_size=settings.DATABASE_POOL_MAX,
+    # Startup: Initialize Supabase client
+    db.connect(
+        supabase_url=settings.NEXT_PUBLIC_SUPABASE_URL,
+        supabase_key=settings.SUPABASE_SERVICE_ROLE_KEY,
     )
     yield
-    # Shutdown: Close database connection pool
-    await db.disconnect()
+    # Shutdown: Cleanup
+    db.disconnect()
 
 
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
@@ -46,11 +45,10 @@ async def root():
 
 @app.get("/health")
 async def health():
-    """Health check endpoint - verifies API and database connectivity."""
+    """Health check endpoint - verifies API and Supabase connectivity."""
     try:
-        # Quick DB check - get connection from pool
-        async with db.acquire():
-            pass
+        # Quick DB check - try to fetch from table
+        db.client.table('purchase_orders').select('po_id').limit(1).execute()
         return {"status": "healthy", "database": "connected"}
     except Exception as e:
         return {"status": "unhealthy", "database": str(e)}
