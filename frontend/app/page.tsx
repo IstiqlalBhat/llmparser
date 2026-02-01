@@ -65,7 +65,7 @@ export default function Home() {
             </div>
 
             {/* Stats bar - Responsive Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 w-full xl:w-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 w-full xl:w-auto">
               <StatCard
                 icon={<Package className="w-4 h-4" />}
                 label="Total"

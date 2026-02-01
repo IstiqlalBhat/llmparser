@@ -12,6 +12,63 @@ if settings.GEMINI_API_KEY:
 
 model = genai.GenerativeModel(settings.GEMINI_MODEL_NAME)
 
+import time
+import asyncio
+
+class TokenBucket:
+    """
+    Token Bucket algorithm for rate limiting.
+    Allows bursts of traffic up to 'capacity', but enforces a long-term 'refill_rate'.
+    """
+    def __init__(self, capacity: int, refill_rate: float):
+        self.capacity = capacity          # Max tokens in the bucket
+        self.tokens = capacity            # Current tokens
+        self.refill_rate = refill_rate    # Tokens added per second
+        self.last_refill = time.time()    # Last time we added tokens
+        self._lock = asyncio.Lock()       # Async lock for thread safety
+
+    async def acquire(self):
+        """
+        Attempt to acquire a token. If bucket is empty, wait until a token is available.
+        """
+        async with self._lock:
+            now = time.time()
+            # Calculate tokens to add since last refill
+            elapsed = now - self.last_refill
+            new_tokens = elapsed * self.refill_rate
+            
+            # Refill bucket, up to capacity
+            if new_tokens > 0:
+                self.tokens = min(self.capacity, self.tokens + new_tokens)
+                self.last_refill = now
+            
+            # If we have a token, take it
+            if self.tokens >= 1:
+                self.tokens -= 1
+                return
+            
+            # If no tokens, calculate wait time
+            # We need 1 token. We have self.tokens (likely < 1).
+            # Shortfall is 1 - self.tokens
+            needed = 1 - self.tokens
+            wait_time = needed / self.refill_rate
+            
+            # Consume the future token now (to reserve our spot)
+            self.tokens -= 1
+            self.last_refill = now  # Reset time because we've effectively consumed forward
+            
+        # Wait outside the lock so others can queue up (though this implementation reserves first)
+        # Note: A strict FIFO queue would be more complex, but this "future reservation" 
+        # works well for simple rate limiting.
+        if wait_time > 0:
+            print(f"Rate limit reached. Waiting {wait_time:.2f}s...")
+            await asyncio.sleep(wait_time)
+
+# Rate Limits for Gemini Free Tier (Safe estimate)
+# 15 requests per minute = 0.25 requests per second
+# Burst capacity = 5 requests
+rate_limiter = TokenBucket(capacity=5, refill_rate=0.25)
+
 PROMPT_TEMPLATE = """
 You are an intelligent Purchase Order extraction assistant.
 The user may paste one or multiple emails. Your job is to identify each separate email/PO and extract information from ALL of them.
@@ -66,6 +123,9 @@ async def parse_email_with_gemini(email_text: str) -> Tuple[List[PurchaseOrder],
     """
     if not settings.GEMINI_API_KEY:
         raise Exception("GEMINI_API_KEY is not set")
+        
+    # Rate Limiting: Wait for token
+    await rate_limiter.acquire()
 
     response = model.generate_content(PROMPT_TEMPLATE.format(email_text=email_text))
 

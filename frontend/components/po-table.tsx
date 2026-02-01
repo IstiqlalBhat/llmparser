@@ -602,31 +602,38 @@ function OrderRow({
                         {order.expected_date || "No date"}
                     </div>
 
-                    <div className="flex-1 max-w-[160px] relative z-10">
-                        <Select
-                            defaultValue={order.status}
-                            onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
-                        >
-                            <SelectTrigger className={`w-full h-9 text-xs ${config.lightBg} ${config.borderColor} border rounded-lg touch-manipulation`}>
-                                <div className="flex items-center gap-1.5 overflow-hidden">
-                                    <div className={`p-0.5 rounded-full ${config.bgColor}`}>
-                                        {config.icon}
-                                    </div>
-                                    <span className={`font-semibold truncate ${config.color}`}>{order.status}</span>
-                                </div>
-                            </SelectTrigger>
-                            <SelectContent
-                                className="bg-card/95 backdrop-blur-md border-border rounded-xl z-[100]"
-                                position="popper"
-                                sideOffset={4}
+                    <div className="flex-1 max-w-[180px] relative z-20">
+                        {/* Status Select with larger touch target */}
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <Select
+                                defaultValue={order.status}
+                                onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
                             >
-                                {Object.entries(statusConfig).map(([status, cfg]) => (
-                                    <SelectItem key={status} value={status} className="touch-manipulation">
-                                        <span className={cfg.color}>{status}</span>
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                                <SelectTrigger className={`w-full h-10 text-xs ${config.lightBg} ${config.borderColor} border rounded-lg touch-manipulation active:scale-[0.98] transition-transform`}>
+                                    <div className="flex items-center gap-2 overflow-hidden">
+                                        <div className={`p-1 rounded-full ${config.bgColor} flex-shrink-0`}>
+                                            {config.icon}
+                                        </div>
+                                        <span className={`font-semibold truncate ${config.color}`}>{order.status}</span>
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent
+                                    className="bg-card/95 backdrop-blur-xl border-border rounded-xl shadow-2xl animate-in zoom-in-95"
+                                    position="popper"
+                                    sideOffset={4}
+                                    align="end"
+                                >
+                                    {Object.entries(statusConfig).map(([status, cfg]) => (
+                                        <SelectItem key={status} value={status} className="py-3 touch-manipulation cursor-pointer">
+                                            <div className="flex items-center gap-2">
+                                                <span className={cfg.color}>{cfg.icon}</span>
+                                                <span className="font-medium">{status}</span>
+                                            </div>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                 </div>
 

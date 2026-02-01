@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "PO Management System"
     GEMINI_API_KEY: str
     GEMINI_MODEL_NAME: str = "gemini-2.0-flash"
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
     
     # PostgreSQL / Supabase Database Settings
     DATABASE_URL: str  # Required: postgresql://user:pass@host:port/db
