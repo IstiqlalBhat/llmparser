@@ -61,7 +61,51 @@ GEMINI_API_KEY=your_actual_api_key_here
 
 > **Note:** Get your API key from [Google AI Studio](https://aistudio.google.com/)
 
-## Installation
+## Running with Docker (Recommended)
+
+The easiest way to run the application is using Docker Compose.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) installed
+- [Docker Compose](https://docs.docker.com/compose/install/) installed (included with Docker Desktop)
+
+### Quick Start
+
+1. Ensure your `.env` file is configured with your Gemini API key (see Environment Setup above)
+
+2. Build and start all services:
+
+```bash
+docker-compose up --build
+```
+
+3. Access the application:
+   - **Frontend**: http://localhost:3000
+   - **Backend API**: http://localhost:8000
+
+### Docker Commands
+
+```bash
+# Start services in background (detached mode)
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild and restart a specific service
+docker-compose up -d --build backend
+docker-compose up -d --build frontend
+```
+
+---
+
+## Manual Installation (Alternative)
+
+If you prefer to run without Docker, follow these steps.
 
 ### Backend
 
@@ -78,8 +122,6 @@ pip install -r requirements.txt
 cd frontend
 npm install
 ```
-
-## Running the Application
 
 ### Start Backend
 
