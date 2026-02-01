@@ -1,6 +1,7 @@
 import { PurchaseOrder, OrderStatus, EmailParsingResponse } from "@/types";
 
-const API_BASE_URL = "http://localhost:8000/api";
+// Use env var or default to relative path for Vercel (proxied), fallback to LAN IP for local
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 export class ApiError extends Error {
     constructor(public message: string, public status?: number) {
