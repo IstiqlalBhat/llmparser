@@ -55,14 +55,24 @@ class PostgresDB:
             yield connection
     
     def _row_to_order(self, row: asyncpg.Record) -> PurchaseOrder:
-        """Convert a database row to a PurchaseOrder object."""
+        # Explicitly convert dates and timestamps to strings for consistent API responses
+        expected_date_str = None
+        if row['expected_date']:
+            # Handle both date and datetime objects just in case
+            val = row['expected_date']
+            expected_date_str = val.strftime("%b %d, %Y") if hasattr(val, 'strftime') else str(val)
+            
+        updated_at_str = "Unknown"
+        if row['updated_at']:
+            updated_at_str = row['updated_at'].strftime("%b %d, %Y")
+            
         return PurchaseOrder(
             id=row['po_id'],
             supplier=row['supplier'],
             items=row['items'],
-            expected_date=row['expected_date'],
+            expected_date=expected_date_str,
             status=OrderStatus(row['status']),
-            last_updated=row['updated_at'].strftime("%b %d, %Y") if row['updated_at'] else "Unknown",
+            last_updated=updated_at_str,
             additional_context=row['additional_context']
         )
     
