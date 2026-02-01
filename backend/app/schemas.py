@@ -11,11 +11,11 @@ class OrderStatus(str, Enum):
 
 class PurchaseOrder(BaseModel):
     id: str = Field(description="The unique PO identifier (e.g., PO-45821)")
-    supplier: str = Field(description="Name of the supplier")
-    items: str = Field(description="Description of items ordered")
+    supplier: str = Field(default="Unknown Supplier", description="Name of the supplier")
+    items: str = Field(default="Items not specified", description="Description of items ordered")
     expected_date: Optional[str] = Field(None, description="Expected delivery/ship date (e.g., Jan 15, 2024)")
-    status: OrderStatus = Field(description="Current status of the order")
-    last_updated: str = Field(description="Date of last update (e.g., Jan 2, 2024)")
+    status: OrderStatus = Field(default=OrderStatus.ON_TRACK, description="Current status of the order")
+    last_updated: str = Field(default="Unknown", description="Date of last update (e.g., Jan 2, 2024)")
     additional_context: Optional[str] = Field(None, description="Additional context like delay reasons, date changes, special notes")
 
 class EmailParsingRequest(BaseModel):

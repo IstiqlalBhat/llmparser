@@ -67,14 +67,7 @@ async def parse_email_with_gemini(email_text: str) -> Tuple[List[PurchaseOrder],
     if not settings.GEMINI_API_KEY:
         raise Exception("GEMINI_API_KEY is not set")
 
-    try:
-        response = model.generate_content(
-            PROMPT_TEMPLATE.format(email_text=email_text),
-            generation_config={"thinking_level": "low"}
-        )
-    except Exception as e:
-        print(f"Error with thinking model/param: {e}. Retrying without config.")
-        response = model.generate_content(PROMPT_TEMPLATE.format(email_text=email_text))
+    response = model.generate_content(PROMPT_TEMPLATE.format(email_text=email_text))
 
     parsed_orders: List[PurchaseOrder] = []
     errors: List[str] = []
@@ -91,9 +84,18 @@ async def parse_email_with_gemini(email_text: str) -> Tuple[List[PurchaseOrder],
         # Parse each order
         for i, order_data in enumerate(data):
             try:
-                parsed_orders.append(PurchaseOrder(**order_data))
+                # Clean null values - replace with empty strings to let defaults work
+                cleaned_data = {}
+                for key, value in order_data.items():
+                    if value is None:
+                        continue  # Skip null values, let Pydantic use defaults
+                    cleaned_data[key] = value
+
+                parsed_orders.append(PurchaseOrder(**cleaned_data))
             except Exception as e:
-                errors.append(f"Failed to parse order {i+1}: {str(e)}")
+                # Include PO ID in error if available for better debugging
+                po_id = order_data.get('id', f'entry {i+1}')
+                errors.append(f"Failed to parse order '{po_id}': {str(e)}")
 
         if not parsed_orders and not errors:
             errors.append("No purchase orders found in the provided text.")
