@@ -178,12 +178,12 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                             </div>
                             <div>
                                 <h2
-                                    className="text-xl font-semibold text-foreground tracking-tight sky-gradient"
+                                    className="text-xl font-bold text-slate-800 tracking-tight"
                                     style={{ fontFamily: "var(--font-display)" }}
                                 >
                                     Purchase Orders
                                 </h2>
-                                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+                                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-semibold mt-0.5">
                                     <span>{filteredOrders.length} orders</span>
                                     {selectedIds.size > 0 && (
                                         <>
@@ -259,7 +259,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 {/* Table Content */}
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     {/* Table header */}
-                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-50/80 border-b border-slate-200/60 text-xs font-bold text-slate-600 uppercase tracking-wide">
+                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/90 border-b border-slate-200 text-xs font-extrabold text-slate-700 uppercase tracking-wide">
                         <div className="col-span-1 flex items-center">
                             <Checkbox
                                 checked={isAllSelected}
@@ -281,17 +281,17 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         {filteredOrders.length === 0 ? (
                             <div className="px-6 py-20 text-center flex flex-col items-center justify-center h-full">
                                 <div className="w-20 h-20 rounded-3xl glass-surface flex items-center justify-center mb-5 glow-sm">
-                                    <Package className="w-10 h-10 text-muted-foreground/40" />
+                                    <Package className="w-10 h-10 text-slate-400" />
                                 </div>
                                 <p
-                                    className="text-foreground font-semibold text-lg"
+                                    className="text-slate-800 font-bold text-lg"
                                     style={{ fontFamily: "var(--font-display)" }}
                                 >
                                     {orders.length === 0
                                         ? "No orders found"
                                         : "No matching orders"}
                                 </p>
-                                <p className="text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
+                                <p className="text-sm text-slate-600 font-medium mt-2 max-w-xs mx-auto">
                                     {orders.length === 0
                                         ? "Paste a supplier email in the parser to get started."
                                         : "Try adjusting your search criteria or status filter."}

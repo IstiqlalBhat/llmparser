@@ -154,12 +154,12 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
                     </div>
                     <div>
                         <h2
-                            className="text-xl font-semibold text-foreground tracking-tight sky-gradient"
+                            className="text-xl font-bold text-slate-800 tracking-tight"
                             style={{ fontFamily: "var(--font-display)" }}
                         >
                             Email Parser
                         </h2>
-                        <p className="text-xs text-slate-500 font-medium mt-0.5">
+                        <p className="text-xs text-slate-600 font-semibold mt-0.5">
                             AI-powered document processing
                         </p>
                     </div>
@@ -181,7 +181,7 @@ Example:
 Subject: PO #12345 Confirmation
 From: supplier@acme.com
 Your order has been confirmed..."
-                        className="resize-none glass-input rounded-xl text-sm placeholder:text-muted-foreground/40 pl-10 [field-sizing:fixed] h-[250px] focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-500 pl-10 [field-sizing:fixed] h-[250px] focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
                         value={emailText}
                         onChange={(e) => setEmailText(e.target.value)}
                         disabled={isParsing}

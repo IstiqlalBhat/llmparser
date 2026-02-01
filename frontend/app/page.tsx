@@ -70,7 +70,7 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center glow-sm">
                   <Layers className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-sm font-bold tracking-[0.2em] uppercase text-sky-700 drop-shadow-sm">
+                <span className="text-sm font-extrabold tracking-[0.2em] uppercase text-slate-800 [text-shadow:_0_1px_2px_rgba(255,255,255,0.8)]">
                   Supply Chain Intelligence
                 </span>
               </div>
@@ -84,7 +84,7 @@ export default function Home() {
               </h1>
 
               {/* Subtitle */}
-              <p className="mt-5 text-slate-600 text-lg lg:text-xl leading-relaxed text-balance max-w-xl">
+              <p className="mt-5 text-slate-700 font-medium text-lg lg:text-xl leading-relaxed text-balance max-w-xl [text-shadow:_0_1px_2px_rgba(255,255,255,0.6)]">
                 AI-powered purchase order management. Parse supplier emails, track shipments,
                 and stay ahead of delays with intelligent automation.
               </p>
@@ -162,13 +162,13 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-20 pt-8 border-t border-slate-200/60">
+        <footer className="mt-20 pt-8 border-t border-slate-300/60">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-            <p className="flex items-center gap-3 text-slate-500">
-              <span className="font-semibold sky-gradient" style={{ fontFamily: "var(--font-display)" }}>
+            <p className="flex items-center gap-3 text-slate-600 font-medium [text-shadow:_0_1px_2px_rgba(255,255,255,0.6)]">
+              <span className="font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
                 Orbital
               </span>
-              <span className="w-1 h-1 rounded-full bg-primary/40" />
+              <span className="w-1 h-1 rounded-full bg-slate-400" />
               <span>Intelligent supply chain management</span>
             </p>
             <SystemStatus />
@@ -220,7 +220,7 @@ function StatCard({
             <span className={color}>{icon}</span>
           </div>
           <div className="min-w-0 flex flex-col">
-            <p className="text-[11px] text-slate-600 font-bold uppercase tracking-wide truncate">
+            <p className="text-[11px] text-slate-700 font-extrabold uppercase tracking-wide truncate">
               {label}
             </p>
             <p
