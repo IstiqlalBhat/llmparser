@@ -36,7 +36,6 @@ import {
     CheckCircle2,
     Calendar,
     Building2,
-    MoreHorizontal,
     Trash2,
     AlertCircle,
     Info,
@@ -55,34 +54,33 @@ interface POTableProps {
 
 const ALL_STATUSES = "all";
 
-const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; bgColor: string; borderColor: string; lightBg: string }> = {
+const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; bgClass: string; borderClass: string }> = {
     "On Track": {
         icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-        color: "text-emerald-400",
-        bgColor: "bg-emerald-900/50",
-        borderColor: "border-emerald-700/50",
-        lightBg: "bg-emerald-950/40",
+        color: "text-emerald-400 drop-shadow-[0_0_3px_rgba(52,211,153,0.5)]",
+        bgClass: "bg-emerald-500/10",
+        borderClass: "border-emerald-500/30",
     },
+    // Changed to Cyan for "electric" feel
     "Shipped": {
         icon: <Truck className="w-3.5 h-3.5" />,
-        color: "text-sky-400",
-        bgColor: "bg-sky-900/50",
-        borderColor: "border-sky-700/50",
-        lightBg: "bg-sky-950/40",
+        color: "text-cyan-400 drop-shadow-[0_0_3px_rgba(34,211,238,0.5)]",
+        bgClass: "bg-cyan-500/10",
+        borderClass: "border-cyan-500/30",
     },
+    // More vibrant amber/yellow
     "Product Delays": {
         icon: <AlertTriangle className="w-3.5 h-3.5" />,
-        color: "text-amber-400",
-        bgColor: "bg-amber-900/50",
-        borderColor: "border-amber-700/50",
-        lightBg: "bg-amber-950/40",
+        color: "text-yellow-400 drop-shadow-[0_0_3px_rgba(250,204,21,0.5)]",
+        bgClass: "bg-yellow-500/10",
+        borderClass: "border-yellow-500/30",
     },
+    // Neon red/pink for delay
     "Shipment Delay": {
         icon: <Clock className="w-3.5 h-3.5" />,
-        color: "text-rose-400",
-        bgColor: "bg-rose-900/50",
-        borderColor: "border-rose-700/50",
-        lightBg: "bg-rose-950/40",
+        color: "text-rose-400 drop-shadow-[0_0_3px_rgba(251,113,133,0.5)]",
+        bgClass: "bg-rose-500/10",
+        borderClass: "border-rose-500/30",
     },
 };
 
@@ -167,23 +165,29 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
 
     return (
         <>
-            <div className="warm-card overflow-hidden border border-border/50 h-full flex flex-col">
+            <div className="glass-card overflow-hidden h-full flex flex-col">
                 {/* Header */}
-                <div className="px-4 py-4 sm:px-6 sm:py-5 border-b border-border/50 bg-gradient-to-r from-background/50 to-secondary/30">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm">
-                                <Package className="w-5 h-5 text-primary" />
+                <div className="px-4 py-5 sm:px-6 border-b border-border/50 relative overflow-hidden">
+                    {/* Header gradient accent */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
+
+                    <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center border border-primary/20 glow-sm">
+                                <Package className="w-6 h-6 text-primary" />
                             </div>
                             <div>
-                                <h2 className="text-lg font-semibold text-foreground tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+                                <h2
+                                    className="text-xl font-semibold text-foreground tracking-tight sky-gradient"
+                                    style={{ fontFamily: "var(--font-display)" }}
+                                >
                                     Purchase Orders
                                 </h2>
-                                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground mt-0.5">
                                     <span>{filteredOrders.length} orders</span>
                                     {selectedIds.size > 0 && (
                                         <>
-                                            <span className="w-1 h-1 rounded-full bg-primary/40" />
+                                            <span className="w-1 h-1 rounded-full bg-primary/60" />
                                             <span className="text-primary font-medium">{selectedIds.size} selected</span>
                                         </>
                                     )}
@@ -198,7 +202,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                     variant="outline"
                                     size="sm"
                                     onClick={handleBulkDeleteClick}
-                                    className="border-rose-800/50 text-rose-400 hover:bg-rose-950/50 hover:border-rose-700/50 w-full sm:w-auto h-10 sm:h-9"
+                                    className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive/50 w-full sm:w-auto h-10 sm:h-9 rounded-xl"
                                 >
                                     <Trash2 className="w-4 h-4 mr-2" />
                                     Delete ({selectedIds.size})
@@ -206,24 +210,24 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                             )}
 
                             <div className="relative flex-1 sm:flex-none">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     placeholder="Search orders..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10 w-full sm:w-64 bg-background/50 border-border hover:border-primary/30 focus:border-primary/50 focus:ring-primary/20 rounded-xl h-10 sm:h-9 text-sm"
+                                    className="pl-10 w-full sm:w-64 glass-input rounded-xl h-10 sm:h-9 text-sm focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
                                 />
                             </div>
 
                             <div className="flex gap-2 w-full sm:w-auto">
                                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                    <SelectTrigger className="w-full sm:w-44 bg-background/50 border-border hover:border-primary/30 rounded-xl h-10 sm:h-9">
+                                    <SelectTrigger className="w-full sm:w-44 glass-input rounded-xl h-10 sm:h-9">
                                         <div className="flex items-center gap-2 truncate">
                                             <Filter className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
                                             <SelectValue placeholder="Status" />
                                         </div>
                                     </SelectTrigger>
-                                    <SelectContent className="bg-card/95 backdrop-blur-md border-border rounded-xl">
+                                    <SelectContent className="glass-card backdrop-blur-xl border-border rounded-xl">
                                         <SelectItem value={ALL_STATUSES}>All Statuses</SelectItem>
                                         {Object.entries(statusConfig).map(([status, config]) => (
                                             <SelectItem key={status} value={status}>
@@ -241,7 +245,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                         variant="outline"
                                         size="icon"
                                         onClick={clearFilters}
-                                        className="border-border hover:bg-secondary/50 flex-shrink-0 rounded-xl h-10 w-10 sm:h-9 sm:w-9"
+                                        className="ghost-glow flex-shrink-0 rounded-xl h-10 w-10 sm:h-9 sm:w-9"
                                         title="Clear filters"
                                     >
                                         <X className="h-4 w-4" />
@@ -255,7 +259,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 {/* Table Content */}
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     {/* Table header */}
-                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3 bg-secondary/30 border-b border-border/50 text-xs font-semibold text-muted-foreground/80 uppercase tracking-wider">
+                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3 glass-surface border-b border-border/30 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         <div className="col-span-1 flex items-center">
                             <Checkbox
                                 checked={isAllSelected}
@@ -273,29 +277,33 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                     </div>
 
                     {/* Table body */}
-                    <div className="divide-y divide-border/30">
+                    <div className="divide-y divide-border/20">
                         {filteredOrders.length === 0 ? (
                             <div className="px-6 py-20 text-center flex flex-col items-center justify-center h-full">
-                                <div className="w-16 h-16 rounded-2xl bg-secondary/50 flex items-center justify-center mb-4">
-                                    <Package className="w-8 h-8 text-muted-foreground/40" />
+                                <div className="w-20 h-20 rounded-3xl glass-surface flex items-center justify-center mb-5 glow-sm">
+                                    <Package className="w-10 h-10 text-muted-foreground/40" />
                                 </div>
-                                <p className="text-foreground font-medium text-lg">
+                                <p
+                                    className="text-foreground font-semibold text-lg"
+                                    style={{ fontFamily: "var(--font-display)" }}
+                                >
                                     {orders.length === 0
                                         ? "No orders found"
                                         : "No matching orders"}
                                 </p>
                                 <p className="text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
                                     {orders.length === 0
-                                        ? "Paste a supplier email in the parser on the left to get started."
+                                        ? "Paste a supplier email in the parser to get started."
                                         : "Try adjusting your search criteria or status filter."}
                                 </p>
                             </div>
                         ) : (
-                            <div className="stagger-fade-in">
-                                {filteredOrders.map((order) => (
+                            <div>
+                                {filteredOrders.map((order, index) => (
                                     <OrderRow
                                         key={order.id}
                                         order={order}
+                                        index={index}
                                         isSelected={selectedIds.has(order.id)}
                                         onToggleSelect={() => toggleSelect(order.id)}
                                         onStatusUpdate={onStatusUpdate}
@@ -309,16 +317,18 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 </div>
             </div>
 
-            {/* Dialogs - Kept visually consistent but minimal changes needed */}
+            {/* Delete Dialog */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-md bg-card/95 backdrop-blur-xl border-border">
+                <DialogContent className="sm:max-w-md glass-card backdrop-blur-xl border-border">
                     <DialogHeader>
                         <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-full bg-rose-950/60 flex items-center justify-center flex-shrink-0">
-                                <AlertCircle className="w-6 h-6 text-rose-400" />
+                            <div className="w-14 h-14 rounded-2xl bg-destructive/20 flex items-center justify-center flex-shrink-0 border border-destructive/30">
+                                <AlertCircle className="w-7 h-7 text-destructive" />
                             </div>
                             <div>
-                                <DialogTitle className="text-xl">Delete Order?</DialogTitle>
+                                <DialogTitle className="text-xl" style={{ fontFamily: "var(--font-display)" }}>
+                                    Delete Order?
+                                </DialogTitle>
                                 <DialogDescription className="text-muted-foreground mt-1">
                                     This action is permanent and cannot be undone.
                                 </DialogDescription>
@@ -327,7 +337,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                     </DialogHeader>
 
                     {orderToDelete && (
-                        <div className="rounded-xl border border-border bg-secondary/40 p-4 space-y-3 my-2">
+                        <div className="rounded-xl glass-surface border border-border p-4 space-y-3 my-2">
                             <div className="flex items-center justify-between">
                                 <span className="font-mono text-sm font-semibold text-foreground">
                                     {orderToDelete.id}
@@ -345,14 +355,14 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         <Button
                             variant="outline"
                             onClick={() => setDeleteDialogOpen(false)}
-                            className="w-full sm:w-auto rounded-xl"
+                            className="w-full sm:w-auto rounded-xl ghost-glow"
                         >
                             Cancel
                         </Button>
                         <Button
                             variant="destructive"
                             onClick={handleConfirmDelete}
-                            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-600/30"
+                            className="w-full sm:w-auto bg-destructive hover:bg-destructive/90 rounded-xl"
                         >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete Order
@@ -361,15 +371,18 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 </DialogContent>
             </Dialog>
 
+            {/* Bulk Delete Dialog */}
             <Dialog open={bulkDeleteDialogOpen} onOpenChange={setBulkDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-lg bg-card/95 backdrop-blur-xl border-border">
+                <DialogContent className="sm:max-w-lg glass-card backdrop-blur-xl border-border">
                     <DialogHeader>
                         <div className="flex items-center gap-4 mb-2">
-                            <div className="w-12 h-12 rounded-full bg-rose-950/60 flex items-center justify-center flex-shrink-0">
-                                <AlertCircle className="w-6 h-6 text-rose-400" />
+                            <div className="w-14 h-14 rounded-2xl bg-destructive/20 flex items-center justify-center flex-shrink-0 border border-destructive/30">
+                                <AlertCircle className="w-7 h-7 text-destructive" />
                             </div>
                             <div>
-                                <DialogTitle className="text-xl">Delete {selectedIds.size} Orders?</DialogTitle>
+                                <DialogTitle className="text-xl" style={{ fontFamily: "var(--font-display)" }}>
+                                    Delete {selectedIds.size} Orders?
+                                </DialogTitle>
                                 <DialogDescription className="text-muted-foreground mt-1">
                                     Are you sure you want to delete these orders? This action cannot be undone.
                                 </DialogDescription>
@@ -377,11 +390,11 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         </div>
                     </DialogHeader>
 
-                    <div className="max-h-60 overflow-y-auto space-y-2 pr-1 my-2">
+                    <div className="max-h-60 overflow-y-auto space-y-2 pr-1 my-2 custom-scrollbar">
                         {selectedOrders.map((order) => (
                             <div
                                 key={order.id}
-                                className="rounded-lg border border-border bg-secondary/30 p-3 flex items-center justify-between"
+                                className="rounded-lg glass-surface border border-border/50 p-3 flex items-center justify-between"
                             >
                                 <span className="font-mono text-sm font-medium text-foreground">
                                     {order.id}
@@ -397,14 +410,14 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         <Button
                             variant="outline"
                             onClick={() => setBulkDeleteDialogOpen(false)}
-                            className="w-full sm:w-auto rounded-xl"
+                            className="w-full sm:w-auto rounded-xl ghost-glow"
                         >
                             Cancel
                         </Button>
                         <Button
                             variant="destructive"
                             onClick={handleConfirmBulkDelete}
-                            className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-600/30"
+                            className="w-full sm:w-auto bg-destructive hover:bg-destructive/90 rounded-xl"
                         >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete {selectedIds.size} Orders
@@ -418,6 +431,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
 
 function OrderRow({
     order,
+    index,
     isSelected,
     onToggleSelect,
     onStatusUpdate,
@@ -425,6 +439,7 @@ function OrderRow({
     onDelete,
 }: {
     order: PurchaseOrder;
+    index: number;
     isSelected: boolean;
     onToggleSelect: () => void;
     onStatusUpdate: (id: string, status: OrderStatus) => void;
@@ -434,7 +449,13 @@ function OrderRow({
     const config = statusConfig[order.status as OrderStatus];
 
     return (
-        <div className={`group px-4 py-3 sm:px-6 sm:py-4 transition-all duration-200 border-l-2 ${isSelected ? 'bg-primary/5 border-l-primary' : 'hover:bg-secondary/30 border-l-transparent'}`}>
+        <div
+            className={`group px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 border-l-2 ${isSelected
+                    ? 'bg-primary/5 border-l-primary'
+                    : 'hover:bg-primary/5 border-l-transparent'
+                }`}
+            style={{ animationDelay: `${index * 0.05}s` }}
+        >
             {/* Desktop layout */}
             <div className="hidden lg:grid lg:grid-cols-14 gap-4 items-center">
                 {/* Checkbox */}
@@ -455,7 +476,7 @@ function OrderRow({
 
                 {/* Supplier */}
                 <div className="col-span-2 flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-secondary/70 flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 rounded-xl glass-surface flex items-center justify-center flex-shrink-0 border border-border/50">
                         <Building2 className="w-4 h-4 text-muted-foreground" />
                     </div>
                     <span className="text-sm truncate font-medium text-foreground">{order.supplier}</span>
@@ -480,17 +501,15 @@ function OrderRow({
                         defaultValue={order.status}
                         onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
                     >
-                        <SelectTrigger className={`w-full h-9 ${config.lightBg} ${config.borderColor} border rounded-lg transition-all duration-200 hover:shadow-sm`}>
+                        <SelectTrigger className={`w-full h-9 ${config.bgClass} ${config.borderClass} border rounded-xl transition-all duration-200 hover:glow-sm`}>
                             <SelectValue>
                                 <div className="flex items-center gap-2">
-                                    <div className={`p-0.5 rounded-full ${config.bgColor}`}>
-                                        {config.icon}
-                                    </div>
+                                    <span className={config.color}>{config.icon}</span>
                                     <span className={`text-xs font-semibold ${config.color}`}>{order.status}</span>
                                 </div>
                             </SelectValue>
                         </SelectTrigger>
-                        <SelectContent className="bg-card/95 backdrop-blur-md border-border rounded-xl">
+                        <SelectContent className="glass-card backdrop-blur-xl border-border rounded-xl">
                             {Object.entries(statusConfig).map(([status, cfg]) => (
                                 <SelectItem key={status} value={status}>
                                     <div className="flex items-center gap-2">
@@ -511,16 +530,16 @@ function OrderRow({
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg"
+                                    className="h-8 w-8 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg"
                                 >
                                     <FileText className="w-4 h-4" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-80 p-0 bg-card/95 backdrop-blur-xl border-border shadow-xl rounded-xl ml-4">
-                                <div className="bg-amber-50/50 px-4 py-3 border-b border-amber-100/50">
+                            <PopoverContent className="w-80 p-0 glass-card backdrop-blur-xl border-border shadow-xl rounded-xl ml-4">
+                                <div className="bg-amber-500/10 px-4 py-3 border-b border-amber-500/20 rounded-t-xl">
                                     <div className="flex items-center gap-2">
-                                        <Info className="w-4 h-4 text-amber-600" />
-                                        <span className="font-semibold text-sm text-amber-900">Additional Context</span>
+                                        <Info className="w-4 h-4 text-amber-400" />
+                                        <span className="font-semibold text-sm text-amber-400">Additional Context</span>
                                     </div>
                                 </div>
                                 <div className="p-4 text-sm leading-relaxed text-foreground/90">
@@ -541,7 +560,7 @@ function OrderRow({
                         variant="ghost"
                         size="icon"
                         onClick={onDelete}
-                        className="h-8 w-8 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-lg"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg"
                     >
                         <Trash2 className="w-4 h-4" />
                     </Button>
@@ -582,7 +601,7 @@ function OrderRow({
                             variant="ghost"
                             size="icon"
                             onClick={onDelete}
-                            className="h-8 w-8 text-muted-foreground/70 hover:text-red-600 hover:bg-red-50 rounded-lg touch-manipulation"
+                            className="h-8 w-8 text-muted-foreground/70 hover:text-destructive hover:bg-destructive/10 rounded-lg touch-manipulation"
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -590,35 +609,32 @@ function OrderRow({
                 </div>
 
                 {/* Row 2: Items (Clamped) */}
-                <div className="bg-secondary/30 rounded-lg p-2.5 text-sm text-foreground/90 border border-border/40">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1 block">Items</span>
+                <div className="glass-surface rounded-xl p-3 text-sm text-foreground/90 border border-border/30">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 block">Items</span>
                     <p className="line-clamp-2 leading-relaxed">{order.items}</p>
                 </div>
 
                 {/* Row 3: Meta & Status */}
                 <div className="flex items-center justify-between gap-3 pt-1">
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-secondary/20 px-2 py-1.5 rounded-md border border-border/30">
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground glass-surface px-3 py-2 rounded-lg border border-border/30">
                         <Calendar className="w-3.5 h-3.5" />
                         {order.expected_date || "No date"}
                     </div>
 
                     <div className="flex-1 max-w-[180px] relative z-20">
-                        {/* Status Select with larger touch target */}
                         <div onClick={(e) => e.stopPropagation()}>
                             <Select
                                 defaultValue={order.status}
                                 onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
                             >
-                                <SelectTrigger className={`w-full h-10 text-xs ${config.lightBg} ${config.borderColor} border rounded-lg touch-manipulation active:scale-[0.98] transition-transform`}>
+                                <SelectTrigger className={`w-full h-10 text-xs ${config.bgClass} ${config.borderClass} border rounded-xl touch-manipulation active:scale-[0.98] transition-transform`}>
                                     <div className="flex items-center gap-2 overflow-hidden">
-                                        <div className={`p-1 rounded-full ${config.bgColor} flex-shrink-0`}>
-                                            {config.icon}
-                                        </div>
+                                        <span className={config.color}>{config.icon}</span>
                                         <span className={`font-semibold truncate ${config.color}`}>{order.status}</span>
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent
-                                    className="bg-card/95 backdrop-blur-xl border-border rounded-xl shadow-2xl animate-in zoom-in-95"
+                                    className="glass-card backdrop-blur-xl border-border rounded-xl shadow-2xl"
                                     position="popper"
                                     sideOffset={4}
                                     align="end"
@@ -639,9 +655,9 @@ function OrderRow({
 
                 {/* Additional Context Indicator (Mobile) */}
                 {order.additional_context && (
-                    <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50/70 p-2 rounded-lg border border-amber-100/50">
+                    <div className="flex items-start gap-2 text-xs text-amber-400 glass-surface p-3 rounded-xl border border-amber-500/20">
                         <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-                        <p>{order.additional_context}</p>
+                        <p className="leading-relaxed">{order.additional_context}</p>
                     </div>
                 )}
             </div>
@@ -650,23 +666,23 @@ function OrderRow({
 }
 
 function StatusBadge({ status }: { status: string }) {
-    const getStatusStyles = () => {
+    const getStatusClass = () => {
         switch (status) {
             case "On Track":
-                return "bg-emerald-100 text-emerald-700 border-emerald-200";
+                return "status-on-track";
             case "Shipped":
-                return "bg-blue-100 text-blue-700 border-blue-200";
+                return "status-shipped";
             case "Product Delays":
-                return "bg-amber-100 text-amber-700 border-amber-200";
+                return "status-product-delay";
             case "Shipment Delay":
-                return "bg-red-100 text-red-700 border-red-200";
+                return "status-shipment-delay";
             default:
-                return "bg-secondary text-secondary-foreground border-border";
+                return "glass-surface text-foreground";
         }
     };
 
     return (
-        <Badge variant="outline" className={`${getStatusStyles()} font-medium text-xs`}>
+        <Badge variant="outline" className={`${getStatusClass()} font-medium text-xs px-2`}>
             {status}
         </Badge>
     );

@@ -52,10 +52,10 @@ export default function Home() {
         toastOptions={{
           className: "glass-card",
           style: {
-            background: "rgba(20, 40, 65, 0.9)",
+            background: "rgba(255, 255, 255, 0.9)",
             backdropFilter: "blur(20px)",
-            border: "1px solid rgba(91, 168, 217, 0.2)",
-            color: "#E8F4FC",
+            border: "1px solid rgba(255, 255, 255, 0.5)",
+            color: "#1e293b",
           },
         }}
       />
@@ -80,7 +80,7 @@ export default function Home() {
                 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance leading-[1.1]"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                <span className="aurora-shimmer">Aether</span>
+                <span className="aurora-shimmer">ORBITAL</span>
               </h1>
 
               {/* Subtitle */}
@@ -96,45 +96,40 @@ export default function Home() {
                 icon={<Package className="w-5 h-5" />}
                 label="Total Orders"
                 value={totalOrders}
-                color="text-foreground"
-                accentColor="from-slate-400/20 to-slate-500/10"
-                borderColor="border-slate-400/20"
+                color="text-slate-700"
+                iconBg="bg-slate-100"
                 delay={0}
               />
               <StatCard
                 icon={<TrendingUp className="w-5 h-5" />}
                 label="On Track"
                 value={onTrackOrders}
-                color="text-emerald-400"
-                accentColor="from-emerald-400/20 to-emerald-500/10"
-                borderColor="border-emerald-400/30"
+                color="text-emerald-600"
+                iconBg="bg-emerald-100"
                 delay={1}
               />
               <StatCard
                 icon={<Zap className="w-5 h-5" />}
                 label="Shipped"
                 value={shippedOrders}
-                color="text-sky-400"
-                accentColor="from-sky-400/20 to-sky-500/10"
-                borderColor="border-sky-400/30"
+                color="text-sky-600"
+                iconBg="bg-sky-100"
                 delay={2}
               />
               <StatCard
                 icon={<AlertTriangle className="w-5 h-5" />}
                 label="Product Delays"
                 value={productDelays}
-                color="text-amber-400"
-                accentColor="from-amber-400/20 to-amber-500/10"
-                borderColor="border-amber-400/30"
+                color="text-amber-600"
+                iconBg="bg-amber-100"
                 delay={3}
               />
               <StatCard
                 icon={<Clock className="w-5 h-5" />}
                 label="Shipment Delays"
                 value={shipmentDelays}
-                color="text-rose-400"
-                accentColor="from-rose-400/20 to-rose-500/10"
-                borderColor="border-rose-400/30"
+                color="text-rose-600"
+                iconBg="bg-rose-100"
                 delay={4}
               />
             </div>
@@ -171,7 +166,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
             <p className="flex items-center gap-3 text-muted-foreground">
               <span className="font-semibold sky-gradient" style={{ fontFamily: "var(--font-display)" }}>
-                Aether
+                Orbital
               </span>
               <span className="w-1 h-1 rounded-full bg-primary/40" />
               <span>Intelligent supply chain management</span>
@@ -198,40 +193,43 @@ function StatCard({
   label,
   value,
   color,
-  accentColor,
-  borderColor,
+  iconBg,
   delay,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   color: string;
-  accentColor: string;
-  borderColor: string;
+  iconBg: string;
   delay: number;
 }) {
   return (
     <div
-      className={`glass-card glass-card-hover p-4 cursor-default group float-up ${borderColor}`}
+      className="liquid-glass cursor-default group float-up"
       style={{ animationDelay: `${0.3 + delay * 0.1}s` }}
     >
-      {/* Accent gradient background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${accentColor} opacity-50 rounded-[inherit]`} />
+      {/* Liquid Glass Layers */}
+      <div className="liquid-glass-effect" />
+      <div className="liquid-glass-tint" />
+      <div className="liquid-glass-shine" />
 
-      <div className="relative flex flex-row items-center gap-3">
-        <div className={`w-11 h-11 rounded-xl glass-surface flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:glow-sm border ${borderColor}`}>
-          <span className={color}>{icon}</span>
-        </div>
-        <div className="min-w-0 flex flex-col">
-          <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider truncate">
-            {label}
-          </p>
-          <p
-            className={`text-2xl font-bold ${color} leading-none mt-1`}
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {value}
-          </p>
+      {/* Content */}
+      <div className="liquid-glass-content p-4">
+        <div className="flex flex-row items-center gap-3">
+          <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110`}>
+            <span className={color}>{icon}</span>
+          </div>
+          <div className="min-w-0 flex flex-col">
+            <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider truncate">
+              {label}
+            </p>
+            <p
+              className={`text-2xl font-bold ${color} leading-none mt-0.5`}
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              {value}
+            </p>
+          </div>
         </div>
       </div>
     </div>

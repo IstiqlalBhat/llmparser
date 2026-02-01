@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Sparkles, Check, X, Mail, Cpu, ArrowRight, FileText, CheckCheck, Trash2, Info, Pencil, Plus } from "lucide-react";
+import { Loader2, Sparkles, Check, X, Mail, Cpu, FileText, Info, Pencil, Plus } from "lucide-react";
 import { PurchaseOrder } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
@@ -68,7 +68,6 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const handleSaveEdit = (savedOrder: PurchaseOrder) => {
         if (isManualEntry) {
             onOrderParsed(savedOrder);
-            // Don't add to parsedOrders list, just accept it directly
         } else {
             setParsedOrders(prev => prev.map(o => o.id === editingOrder?.id ? savedOrder : o));
         }
@@ -95,19 +94,25 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const hasResults = parsedOrders.length > 0 || parseErrors.length > 0;
 
     return (
-        <div className="warm-card overflow-hidden flex flex-col border border-border/50 sticky top-8">
+        <div className="glass-card overflow-hidden flex flex-col border-primary/10">
             {/* Header */}
-            <div className="px-5 py-5 border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm">
-                        <Mail className="w-5 h-5 text-primary" />
+            <div className="px-5 py-5 border-b border-border/50 relative overflow-hidden">
+                {/* Header gradient accent */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-transparent" />
+
+                <div className="relative flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center border border-primary/20 glow-sm">
+                        <Mail className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-foreground tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+                        <h2
+                            className="text-xl font-semibold text-foreground tracking-tight sky-gradient"
+                            style={{ fontFamily: "var(--font-display)" }}
+                        >
                             Email Parser
                         </h2>
-                        <p className="text-xs text-muted-foreground">
-                            AI-powered processing
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                            AI-powered document processing
                         </p>
                     </div>
                 </div>
@@ -117,7 +122,7 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
             <div className="p-5 flex-1 flex flex-col gap-5 overflow-y-auto custom-scrollbar">
                 {/* Textarea */}
                 <div className="relative group">
-                    <div className="absolute top-3 left-3 text-muted-foreground/40 group-focus-within:text-primary/70 transition-colors">
+                    <div className="absolute top-3.5 left-3.5 text-muted-foreground/40 group-focus-within:text-primary/70 transition-colors z-10">
                         <FileText className="w-4 h-4" />
                     </div>
                     <Textarea
@@ -127,26 +132,25 @@ Example:
 ---
 Subject: PO #12345 Confirmation
 From: supplier@acme.com
-Your order has been confirmed...
-"
-                        className="resize-none bg-background/50 border-dashed border-border group-hover:border-primary/30 focus:border-primary focus:ring-primary/10 transition-all duration-200 text-sm placeholder:text-muted-foreground/40 pl-10 rounded-xl [field-sizing:fixed] h-[250px]"
+Your order has been confirmed..."
+                        className="resize-none glass-input rounded-xl text-sm placeholder:text-muted-foreground/40 pl-10 [field-sizing:fixed] h-[250px] focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
                         value={emailText}
                         onChange={(e) => setEmailText(e.target.value)}
                         disabled={isParsing}
                     />
                     {emailText && !hasResults && !isParsing && (
-                        <div className="absolute bottom-3 right-3 text-[10px] font-medium text-muted-foreground bg-background/60 px-2 py-1 rounded-full border border-border/50">
+                        <div className="absolute bottom-3 right-3 text-[10px] font-medium text-muted-foreground glass-surface px-2.5 py-1 rounded-full">
                             {emailText.length} chars
                         </div>
                     )}
 
                     {/* Loading Overlay */}
                     {isParsing && (
-                        <div className="absolute inset-0 z-10 bg-background/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center border border-primary/10">
-                            <div className="bg-white p-3 rounded-full shadow-lg border border-primary/10 mb-3 animate-pulse">
-                                <Cpu className="w-6 h-6 text-primary animate-pulse" />
+                        <div className="absolute inset-0 z-10 glass-surface rounded-xl flex flex-col items-center justify-center">
+                            <div className="glass-card p-4 rounded-2xl border border-primary/20 mb-4 glow-md">
+                                <Cpu className="w-8 h-8 text-primary animate-pulse" />
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2.5">
                                 <Loader2 className="w-4 h-4 text-primary animate-spin" />
                                 <span className="text-sm font-medium text-primary">Analyzing content...</span>
                             </div>
@@ -156,26 +160,26 @@ Your order has been confirmed...
 
                 {/* Error display */}
                 {error && (
-                    <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50/50 border border-red-100 scale-in">
-                        <div className="w-8 h-8 rounded-lg bg-red-100/50 flex items-center justify-center flex-shrink-0">
-                            <X className="w-4 h-4 text-red-600" />
+                    <div className="flex items-start gap-3 p-4 rounded-xl glass-surface border border-destructive/30 scale-in">
+                        <div className="w-9 h-9 rounded-lg bg-destructive/20 flex items-center justify-center flex-shrink-0">
+                            <X className="w-4 h-4 text-destructive" />
                         </div>
                         <div>
-                            <p className="font-medium text-red-700 text-sm">Parsing failed</p>
-                            <p className="text-sm text-red-600/80 mt-1">{error}</p>
+                            <p className="font-medium text-destructive text-sm">Parsing failed</p>
+                            <p className="text-sm text-destructive/80 mt-1">{error}</p>
                         </div>
                     </div>
                 )}
 
                 {/* Parse warnings/errors */}
                 {parseErrors.length > 0 && (
-                    <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50/50 border border-amber-100 scale-in shadow-sm">
-                        <div className="w-8 h-8 rounded-lg bg-amber-100/50 flex items-center justify-center flex-shrink-0">
-                            <Sparkles className="w-4 h-4 text-amber-600" />
+                    <div className="flex items-start gap-3 p-4 rounded-xl glass-surface border border-amber-500/30 scale-in">
+                        <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                            <Sparkles className="w-4 h-4 text-amber-400" />
                         </div>
                         <div>
-                            <p className="font-medium text-amber-700 text-sm">Review Needed</p>
-                            <ul className="text-sm text-amber-600/80 mt-1 list-disc list-inside space-y-0.5">
+                            <p className="font-medium text-amber-400 text-sm">Review Needed</p>
+                            <ul className="text-sm text-amber-400/80 mt-1 list-disc list-inside space-y-0.5">
                                 {parseErrors.map((err, i) => (
                                     <li key={i}>{err}</li>
                                 ))}
@@ -189,9 +193,9 @@ Your order has been confirmed...
                     <div className="space-y-4 scale-in">
                         {/* Results header with bulk actions */}
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-emerald-50/50 border border-emerald-100/50">
-                                <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-                                <span className="text-xs font-semibold text-emerald-700">
+                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass-surface border border-emerald-500/30">
+                                <Cpu className="w-3.5 h-3.5 text-emerald-400" />
+                                <span className="text-xs font-semibold text-emerald-400">
                                     {parsedOrders.length} Found
                                 </span>
                             </div>
@@ -201,7 +205,7 @@ Your order has been confirmed...
                                     <Button
                                         onClick={handleAcceptAll}
                                         size="sm"
-                                        className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
+                                        className="h-8 text-xs crystal-button text-primary-foreground"
                                     >
                                         Accept All
                                     </Button>
@@ -209,7 +213,7 @@ Your order has been confirmed...
                                         onClick={handleDiscardAll}
                                         size="sm"
                                         variant="ghost"
-                                        className="h-7 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+                                        className="h-8 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
                                     >
                                         Discard
                                     </Button>
@@ -240,7 +244,7 @@ Your order has been confirmed...
                             <Button
                                 onClick={handleParse}
                                 disabled={isParsing || !emailText.trim()}
-                                className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl shadow-lg shadow-primary/20 transition-all duration-200 group"
+                                className="w-full h-12 crystal-button text-primary-foreground font-semibold rounded-xl transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isParsing ? (
                                     <>
@@ -257,9 +261,9 @@ Your order has been confirmed...
                             <Button
                                 onClick={handleManualEntry}
                                 variant="ghost"
-                                className="w-full h-9 text-xs text-muted-foreground hover:text-primary hover:bg-primary/5 border border-dashed border-border rounded-xl"
+                                className="w-full h-10 text-xs text-muted-foreground hover:text-primary ghost-glow rounded-xl"
                             >
-                                <Plus className="w-3 h-3 mr-1.5" />
+                                <Plus className="w-3.5 h-3.5 mr-1.5" />
                                 Manual Entry
                             </Button>
                         </div>
@@ -268,15 +272,15 @@ Your order has been confirmed...
                             <Button
                                 onClick={handleManualEntry}
                                 variant="outline"
-                                className="h-10 border-dashed border-primary/30 text-primary hover:bg-primary/5 rounded-xl text-xs"
+                                className="h-11 ghost-glow text-primary hover:text-primary rounded-xl text-xs"
                             >
-                                <Plus className="w-3 h-3 mr-1.5" />
+                                <Plus className="w-3.5 h-3.5 mr-1.5" />
                                 Add Manual
                             </Button>
                             <Button
                                 onClick={handleClearAll}
                                 variant="outline"
-                                className="h-10 hover:bg-secondary/50 rounded-xl text-xs"
+                                className="h-11 ghost-glow hover:border-muted-foreground/30 rounded-xl text-xs"
                             >
                                 <X className="w-3.5 h-3.5 mr-1.5" />
                                 Clear
@@ -313,20 +317,20 @@ function OrderCard({
     onDiscard: () => void;
 }) {
     return (
-        <div className="group rounded-xl border border-emerald-100/60 bg-gradient-to-br from-emerald-50/40 to-white/50 backdrop-blur-sm overflow-hidden transition-all hover:shadow-md hover:border-emerald-200/80">
+        <div className="group rounded-xl glass-surface border border-emerald-500/20 overflow-hidden transition-all hover:border-emerald-500/40 hover:glow-sm">
             {/* Order header */}
-            <div className="px-3.5 py-2.5 bg-emerald-100/30 border-b border-emerald-100/50 flex items-center justify-between">
+            <div className="px-4 py-3 bg-emerald-500/5 border-b border-emerald-500/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold tracking-wider text-emerald-600/80 bg-white/50 px-1.5 py-0.5 rounded uppercase">
+                    <span className="text-[10px] font-bold tracking-wider text-emerald-400 glass-surface px-2 py-0.5 rounded uppercase border border-emerald-500/20">
                         Detected
                     </span>
-                    <span className="text-xs font-semibold text-emerald-900">{order.id}</span>
+                    <span className="text-sm font-semibold text-foreground">{order.id}</span>
                 </div>
                 <StatusBadge status={order.status} />
             </div>
 
             {/* Order content */}
-            <div className="p-3.5 space-y-3">
+            <div className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-4 text-xs">
                     <div>
                         <span className="text-muted-foreground/70 text-[10px] uppercase tracking-wider font-semibold">Supplier</span>
@@ -340,27 +344,27 @@ function OrderCard({
 
                 <div>
                     <span className="text-muted-foreground/70 text-[10px] uppercase tracking-wider font-semibold">Items</span>
-                    <p className="text-xs text-foreground/80 bg-white/40 rounded-lg p-2 mt-1 border border-emerald-100/40 leading-relaxed">
+                    <p className="text-xs text-foreground/80 glass-surface rounded-lg p-2.5 mt-1 border border-emerald-500/10 leading-relaxed">
                         {order.items}
                     </p>
                 </div>
 
                 {/* Additional Context */}
                 {order.additional_context && (
-                    <div className="flex gap-2 bg-amber-50/50 p-2 rounded-lg border border-amber-100/40">
-                        <Info className="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-xs text-amber-800/90 leading-relaxed">
+                    <div className="flex gap-2 glass-surface p-2.5 rounded-lg border border-amber-500/20">
+                        <Info className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-400/90 leading-relaxed">
                             {order.additional_context}
                         </p>
                     </div>
                 )}
 
                 {/* Action buttons */}
-                <div className="flex gap-2 pt-1 border-t border-emerald-100/30 mt-1">
+                <div className="flex gap-2 pt-2 border-t border-emerald-500/10">
                     <Button
                         onClick={onAccept}
                         size="sm"
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-8 text-xs shadow-sm shadow-emerald-200"
+                        className="flex-1 crystal-button text-primary-foreground h-9 text-xs"
                     >
                         <Check className="w-3.5 h-3.5 mr-1.5" />
                         Accept
@@ -370,7 +374,7 @@ function OrderCard({
                             onClick={onEdit}
                             size="sm"
                             variant="ghost"
-                            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            className="h-9 w-9 p-0 text-primary hover:text-primary hover:bg-primary/10 rounded-lg"
                             title="Edit"
                         >
                             <Pencil className="w-3.5 h-3.5" />
@@ -379,7 +383,7 @@ function OrderCard({
                             onClick={onDiscard}
                             size="sm"
                             variant="ghost"
-                            className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                            className="h-9 w-9 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg"
                             title="Discard"
                         >
                             <X className="w-3.5 h-3.5" />
@@ -395,20 +399,20 @@ function StatusBadge({ status }: { status: string }) {
     const getStatusStyles = () => {
         switch (status) {
             case "On Track":
-                return "bg-emerald-100/70 text-emerald-700 border-emerald-200/60";
+                return "status-on-track";
             case "Shipped":
-                return "bg-blue-100/70 text-blue-700 border-blue-200/60";
+                return "status-shipped";
             case "Product Delays":
-                return "bg-amber-100/70 text-amber-700 border-amber-200/60";
+                return "status-product-delay";
             case "Shipment Delay":
-                return "bg-red-100/70 text-red-700 border-red-200/60";
+                return "status-shipment-delay";
             default:
-                return "bg-secondary text-secondary-foreground border-border";
+                return "glass-surface text-foreground";
         }
     };
 
     return (
-        <Badge variant="outline" className={`${getStatusStyles()} font-semibold text-[10px]`}>
+        <Badge variant="outline" className={`${getStatusStyles()} font-semibold text-[10px] px-2`}>
             {status}
         </Badge>
     );

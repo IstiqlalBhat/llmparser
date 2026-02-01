@@ -21,6 +21,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { PurchaseOrder, OrderStatus } from "@/types";
+import { Package, CheckCircle2, Truck, AlertTriangle, Clock } from "lucide-react";
 
 interface EditOrderDialogProps {
     open: boolean;
@@ -30,11 +31,11 @@ interface EditOrderDialogProps {
     title?: string;
 }
 
-const ORDER_STATUSES: OrderStatus[] = [
-    "On Track",
-    "Shipped",
-    "Product Delays",
-    "Shipment Delay",
+const ORDER_STATUSES: { value: OrderStatus; label: string; icon: React.ReactNode; color: string }[] = [
+    { value: "On Track", label: "On Track", icon: <CheckCircle2 className="w-4 h-4" />, color: "text-emerald-400" },
+    { value: "Shipped", label: "Shipped", icon: <Truck className="w-4 h-4" />, color: "text-sky-400" },
+    { value: "Product Delays", label: "Product Delays", icon: <AlertTriangle className="w-4 h-4" />, color: "text-amber-400" },
+    { value: "Shipment Delay", label: "Shipment Delay", icon: <Clock className="w-4 h-4" />, color: "text-rose-400" },
 ];
 
 export function EditOrderDialog({
@@ -71,100 +72,158 @@ export function EditOrderDialog({
         onOpenChange(false);
     };
 
+    const currentStatus = ORDER_STATUSES.find(s => s.value === formData.status);
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px] bg-card border-border">
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>
-                        Make changes to the purchase order details below.
-                    </DialogDescription>
+            <DialogContent className="sm:max-w-[480px] glass-card backdrop-blur-xl border-border p-0 overflow-hidden">
+                {/* Header */}
+                <DialogHeader className="px-6 py-5 border-b border-border/50 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-transparent" />
+                    <div className="relative flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center border border-primary/20 glow-sm">
+                            <Package className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                            <DialogTitle
+                                className="text-xl sky-gradient"
+                                style={{ fontFamily: "var(--font-display)" }}
+                            >
+                                {title}
+                            </DialogTitle>
+                            <DialogDescription className="text-muted-foreground mt-0.5">
+                                Enter the purchase order details below.
+                            </DialogDescription>
+                        </div>
+                    </div>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="po-id" className="text-right">
-                            PO ID
-                        </Label>
-                        <Input
-                            id="po-id"
-                            value={formData.id}
-                            onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                            className="col-span-3"
-                            required
-                        />
+
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="p-6 space-y-5">
+                    {/* PO ID & Supplier Row */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="po-id" className="text-sm font-medium text-foreground">
+                                PO ID
+                            </Label>
+                            <Input
+                                id="po-id"
+                                value={formData.id}
+                                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                                className="glass-input rounded-xl h-11 focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+                                placeholder="PO-12345"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="supplier" className="text-sm font-medium text-foreground">
+                                Supplier
+                            </Label>
+                            <Input
+                                id="supplier"
+                                value={formData.supplier}
+                                onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
+                                className="glass-input rounded-xl h-11 focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+                                placeholder="Acme Corp"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="supplier" className="text-right">
-                            Supplier
-                        </Label>
-                        <Input
-                            id="supplier"
-                            value={formData.supplier}
-                            onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
-                            className="col-span-3"
-                            required
-                        />
+
+                    {/* Status & Expected Date Row */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="status" className="text-sm font-medium text-foreground">
+                                Status
+                            </Label>
+                            <Select
+                                value={formData.status}
+                                onValueChange={(value) => setFormData({ ...formData, status: value as OrderStatus })}
+                            >
+                                <SelectTrigger className="glass-input rounded-xl h-11">
+                                    <SelectValue>
+                                        {currentStatus && (
+                                            <div className="flex items-center gap-2">
+                                                <span className={currentStatus.color}>{currentStatus.icon}</span>
+                                                <span>{currentStatus.label}</span>
+                                            </div>
+                                        )}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent className="glass-card backdrop-blur-xl border-border rounded-xl">
+                                    {ORDER_STATUSES.map((status) => (
+                                        <SelectItem key={status.value} value={status.value}>
+                                            <div className="flex items-center gap-2">
+                                                <span className={status.color}>{status.icon}</span>
+                                                <span>{status.label}</span>
+                                            </div>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="date" className="text-sm font-medium text-foreground">
+                                Expected Date
+                            </Label>
+                            <Input
+                                id="date"
+                                value={formData.expected_date || ""}
+                                onChange={(e) => setFormData({ ...formData, expected_date: e.target.value })}
+                                className="glass-input rounded-xl h-11 focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+                                placeholder="Jan 15, 2024"
+                            />
+                        </div>
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="status" className="text-right">
-                            Status
-                        </Label>
-                        <Select
-                            value={formData.status}
-                            onValueChange={(value) => setFormData({ ...formData, status: value as OrderStatus })}
-                        >
-                            <SelectTrigger className="col-span-3">
-                                <SelectValue placeholder="Select status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {ORDER_STATUSES.map((status) => (
-                                    <SelectItem key={status} value={status}>
-                                        {status}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="grid grid-cols-4 items-start gap-4">
-                        <Label htmlFor="items" className="text-right pt-2">
+
+                    {/* Items */}
+                    <div className="space-y-2">
+                        <Label htmlFor="items" className="text-sm font-medium text-foreground">
                             Items
                         </Label>
                         <Textarea
                             id="items"
                             value={formData.items}
                             onChange={(e) => setFormData({ ...formData, items: e.target.value })}
-                            className="col-span-3"
+                            className="glass-input rounded-xl min-h-[100px] focus:border-primary/40 focus:ring-2 focus:ring-primary/10 resize-none"
+                            placeholder="100x Widget A, 50x Widget B..."
                             required
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="date" className="text-right">
-                            Expected
-                        </Label>
-                        <Input
-                            id="date"
-                            value={formData.expected_date || ""}
-                            onChange={(e) => setFormData({ ...formData, expected_date: e.target.value })}
-                            className="col-span-3"
-                            placeholder="e.g. Jan 15, 2024"
-                        />
-                    </div>
-                    <div className="grid grid-cols-4 items-start gap-4">
-                        <Label htmlFor="context" className="text-right pt-2">
-                            Context
+
+                    {/* Additional Context */}
+                    <div className="space-y-2">
+                        <Label htmlFor="context" className="text-sm font-medium text-foreground">
+                            Additional Context
+                            <span className="text-muted-foreground font-normal ml-1">(optional)</span>
                         </Label>
                         <Textarea
                             id="context"
                             value={formData.additional_context || ""}
                             onChange={(e) => setFormData({ ...formData, additional_context: e.target.value })}
-                            className="col-span-3"
-                            placeholder="Optional notes..."
+                            className="glass-input rounded-xl min-h-[80px] focus:border-primary/40 focus:ring-2 focus:ring-primary/10 resize-none"
+                            placeholder="Any notes about delays, special instructions, etc..."
                         />
                     </div>
+
+                    {/* Footer */}
+                    <DialogFooter className="flex flex-col-reverse sm:flex-row gap-3 pt-4 border-t border-border/50">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => onOpenChange(false)}
+                            className="w-full sm:w-auto rounded-xl ghost-glow h-11"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="w-full sm:w-auto crystal-button text-primary-foreground rounded-xl h-11"
+                        >
+                            Save Changes
+                        </Button>
+                    </DialogFooter>
                 </form>
-                <DialogFooter>
-                    <Button type="submit" onClick={handleSubmit}>Save changes</Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

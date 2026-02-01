@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans } from "next/font/google";
+import { Rajdhani, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const rajdhani = Rajdhani({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
 });
 
-const dmSans = DM_Sans({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Aether | Supply Chain Intelligence",
+  title: "Orbital | Supply Chain Intelligence",
   description: "AI-powered purchase order management and supplier tracking",
 };
 
@@ -27,9 +27,56 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}
+        className={`${rajdhani.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
+
+        {/* SVG Filter for Liquid Glass Distortion Effect */}
+        <svg style={{ display: 'none' }} aria-hidden="true">
+          <filter
+            id="glass-distortion"
+            x="0%"
+            y="0%"
+            width="100%"
+            height="100%"
+            filterUnits="objectBoundingBox"
+          >
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.015 0.015"
+              numOctaves="1"
+              seed="5"
+              result="turbulence"
+            />
+            <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
+            <feSpecularLighting
+              in="softMap"
+              surfaceScale="3"
+              specularConstant="0.8"
+              specularExponent="80"
+              lightingColor="white"
+              result="specLight"
+            >
+              <fePointLight x="-100" y="-100" z="200" />
+            </feSpecularLighting>
+            <feComposite
+              in="specLight"
+              operator="arithmetic"
+              k1="0"
+              k2="0.8"
+              k3="0.8"
+              k4="0"
+              result="litImage"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="softMap"
+              scale="30"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </svg>
       </body>
     </html>
   );

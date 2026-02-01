@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════════════════════
-   AETHER - Sky Blue Glassmorphism Theme
-   An ethereal, atmospheric design with floating glass surfaces
+   ORBITAL - Cyber-Industrial Theme
+   A high-contrast, technical interface for logistics
    ═══════════════════════════════════════════════════════════ */
 
 @theme inline {
@@ -52,65 +52,78 @@
 }
 
 :root {
-  --radius: 1.25rem;
+  --radius: 1rem;
+  /* Restored rounded corners for softer look */
 
   /* ═══════════════════════════════════════════════════════════
-     AETHER - Ethereal Sky Theme
-     Deep atmospheric blues with crystalline accents
+     ORBITAL - Airy Sky Theme
+     Light, readable colors for blue Vanta.js clouds background
      ═══════════════════════════════════════════════════════════ */
 
-  /* Deep atmospheric background */
-  --background: #0B1220;
-  --foreground: #E8F4FC;
+  /* Light background for body fallback */
+  --background: #f0f8ff;
+  /* Alice Blue */
+  --foreground: #1e293b;
+  /* Slate 800 - Dark readable text */
 
-  /* Glass cards with depth */
-  --card: rgba(20, 35, 55, 0.6);
-  --card-foreground: #E8F4FC;
+  /* Frosted Glass Cards - Semi-transparent white */
+  --card: rgba(255, 255, 255, 0.85);
+  --card-foreground: #1e293b;
 
-  --popover: rgba(15, 30, 50, 0.95);
-  --popover-foreground: #E8F4FC;
+  --popover: rgba(255, 255, 255, 0.95);
+  --popover-foreground: #1e293b;
 
-  /* Crystalline Blue Primary */
-  --primary: #5BA8D9;
-  --primary-foreground: #0B1220;
+  /* Primary - Deep Sky Blue */
+  --primary: #0284c7;
+  /* Sky 600 */
+  --primary-foreground: #FFFFFF;
 
-  /* Atmospheric Secondary */
-  --secondary: rgba(30, 50, 75, 0.5);
-  --secondary-foreground: #B8D4E8;
+  /* Secondary - Light Slate */
+  --secondary: rgba(241, 245, 249, 0.8);
+  /* Slate 100 */
+  --secondary-foreground: #475569;
+  /* Slate 600 */
 
-  /* Muted - ethereal and readable */
-  --muted: rgba(40, 60, 90, 0.4);
-  --muted-foreground: #8BAFC8;
+  --muted: rgba(241, 245, 249, 0.6);
+  --muted-foreground: #64748b;
+  /* Slate 500 */
 
-  /* Accent - Aurora Teal */
-  --accent: #4ECDC4;
-  --accent-foreground: #0B1220;
+  /* Accent - Amber for warmth */
+  --accent: #f59e0b;
+  /* Amber 500 */
+  --accent-foreground: #FFFFFF;
 
-  /* Destructive - Coral Pink */
-  --destructive: #E07A5F;
+  --destructive: #dc2626;
+  /* Red 600 */
   --destructive-foreground: #FFFFFF;
 
-  /* Borders - Glass edges with glow */
-  --border: rgba(91, 168, 217, 0.2);
-  --input: rgba(30, 50, 75, 0.6);
-  --ring: #5BA8D9;
+  /* Borders - Subtle, visible on glass */
+  --border: rgba(148, 163, 184, 0.3);
+  /* Slate 400 with opacity */
+  --input: rgba(255, 255, 255, 0.5);
+  --ring: #0284c7;
 
-  /* Charts - Vibrant and distinct */
-  --chart-1: #5BA8D9; /* Sky Blue */
-  --chart-2: #4ECDC4; /* Teal */
-  --chart-3: #F2B880; /* Sunset Gold */
-  --chart-4: #A78BFA; /* Lavender */
-  --chart-5: #E07A5F; /* Coral */
+  /* Charts - Vibrant on light background */
+  --chart-1: #0284c7;
+  /* Sky Blue */
+  --chart-2: #10b981;
+  /* Emerald */
+  --chart-3: #f59e0b;
+  /* Amber */
+  --chart-4: #8b5cf6;
+  /* Violet */
+  --chart-5: #ec4899;
+  /* Pink */
 
-  /* Sidebar */
-  --sidebar: rgba(15, 25, 40, 0.8);
-  --sidebar-foreground: #E8F4FC;
-  --sidebar-primary: #5BA8D9;
-  --sidebar-primary-foreground: #0B1220;
-  --sidebar-accent: rgba(91, 168, 217, 0.1);
-  --sidebar-accent-foreground: #E8F4FC;
-  --sidebar-border: rgba(91, 168, 217, 0.15);
-  --sidebar-ring: #5BA8D9;
+  /* Sidebar - Frosted Glass */
+  --sidebar: rgba(255, 255, 255, 0.7);
+  --sidebar-foreground: #1e293b;
+  --sidebar-primary: #0284c7;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(2, 132, 199, 0.1);
+  --sidebar-accent-foreground: #0284c7;
+  --sidebar-border: rgba(148, 163, 184, 0.2);
+  --sidebar-ring: #0284c7;
 }
 
 @layer base {
@@ -130,113 +143,148 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(15, 30, 50, 0.3);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(91, 168, 217, 0.4), rgba(78, 205, 196, 0.3));
+    background: linear-gradient(180deg, rgba(2, 132, 199, 0.5), rgba(14, 165, 233, 0.4));
     border-radius: 4px;
     border: 2px solid transparent;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(91, 168, 217, 0.6), rgba(78, 205, 196, 0.5));
+    background: linear-gradient(180deg, rgba(2, 132, 199, 0.7), rgba(14, 165, 233, 0.6));
   }
 
   /* Selection styling */
   ::selection {
-    background: rgba(91, 168, 217, 0.3);
-    color: #FFFFFF;
+    background: rgba(2, 132, 199, 0.3);
+    color: #0c4a6e;
+    /* Sky 900 */
   }
 }
 
 @layer components {
   /* ═══════════════════════════════════════════════════════════
-     AETHER GLASS SYSTEM
-     Frosted glass surfaces with atmospheric depth
+     LIQUID GLASS SYSTEM - macOS-inspired Premium Effect
+     Distinctive frosted glass with distortion and shine
      ═══════════════════════════════════════════════════════════ */
 
-  /* Primary Glass Card */
-  .glass-card {
+  /* Liquid Glass Wrapper */
+  .liquid-glass {
     position: relative;
-    background: linear-gradient(
-      135deg,
-      rgba(20, 40, 65, 0.7) 0%,
-      rgba(15, 30, 50, 0.5) 100%
-    );
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid rgba(91, 168, 217, 0.15);
-    border-radius: var(--radius);
-    box-shadow:
-      0 4px 30px rgba(0, 0, 0, 0.3),
-      0 0 40px rgba(91, 168, 217, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
     overflow: hidden;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+      0 8px 32px rgba(0, 50, 100, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
   }
 
-  /* Top edge shimmer */
-  .glass-card::before {
-    content: '';
+  /* Glass distortion layer - provides blur effect */
+  .liquid-glass-effect {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(91, 168, 217, 0.4) 20%,
-      rgba(78, 205, 196, 0.3) 50%,
-      rgba(91, 168, 217, 0.4) 80%,
-      transparent 100%
-    );
-    pointer-events: none;
+    z-index: 0;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    filter: url(#glass-distortion);
+    overflow: hidden;
+    border-radius: inherit;
   }
 
-  /* Subtle inner glow */
-  .glass-card::after {
-    content: '';
+  /* White tint overlay - main visible layer */
+  .liquid-glass-tint {
+    z-index: 1;
     position: absolute;
     inset: 0;
-    background: radial-gradient(
-      ellipse 100% 100% at 50% 0%,
-      rgba(91, 168, 217, 0.03) 0%,
-      transparent 70%
-    );
-    pointer-events: none;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0.6) 100%);
+    border-radius: inherit;
+  }
+
+  /* Inner shine/highlight - glossy effect */
+  .liquid-glass-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    border-radius: inherit;
+    box-shadow:
+      inset 2px 2px 4px 0 rgba(255, 255, 255, 0.9),
+      inset -2px -2px 4px 0 rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  /* Content layer */
+  .liquid-glass-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+  }
+
+  /* Hover state */
+  .liquid-glass:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 12px 40px rgba(0, 50, 100, 0.2),
+      0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .liquid-glass:hover .liquid-glass-tint {
+    background: rgba(255, 255, 255, 0.75);
+  }
+
+  /* Legacy glass-card - now uses liquid glass styling */
+  .glass-card {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 8px 32px rgba(0, 50, 100, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.06),
+      inset 2px 2px 4px 0 rgba(255, 255, 255, 0.8),
+      inset -1px -1px 2px 0 rgba(255, 255, 255, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
   }
 
   .glass-card:hover {
-    border-color: rgba(91, 168, 217, 0.3);
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.8);
     box-shadow:
-      0 8px 40px rgba(0, 0, 0, 0.4),
-      0 0 60px rgba(91, 168, 217, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
+      0 12px 40px rgba(0, 50, 100, 0.18),
+      0 6px 16px rgba(0, 0, 0, 0.08),
+      inset 2px 2px 4px 0 rgba(255, 255, 255, 0.9),
+      inset -1px -1px 2px 0 rgba(255, 255, 255, 0.5);
   }
 
-  /* Glass card hover lift effect */
+  /* Glass card hover lift */
   .glass-card-hover {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5);
   }
 
   .glass-card-hover:hover {
     transform: translateY(-4px) scale(1.01);
-    box-shadow:
-      0 12px 50px rgba(0, 0, 0, 0.4),
-      0 0 80px rgba(91, 168, 217, 0.12);
   }
 
   /* Compact glass surface */
   .glass-surface {
-    background: rgba(20, 40, 65, 0.4);
+    background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(91, 168, 217, 0.1);
-    border-radius: calc(var(--radius) - 4px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 1rem;
   }
 
   /* Glass input styling */
@@ -261,12 +309,10 @@
 
   /* Sky gradient text */
   .sky-gradient {
-    background: linear-gradient(
-      135deg,
-      #5BA8D9 0%,
-      #4ECDC4 50%,
-      #7EC8E3 100%
-    );
+    background: linear-gradient(135deg,
+        #5BA8D9 0%,
+        #4ECDC4 50%,
+        #7EC8E3 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -274,14 +320,12 @@
 
   /* Aurora shimmer effect */
   .aurora-shimmer {
-    background: linear-gradient(
-      90deg,
-      #5BA8D9 0%,
-      #4ECDC4 25%,
-      #A78BFA 50%,
-      #4ECDC4 75%,
-      #5BA8D9 100%
-    );
+    background: linear-gradient(90deg,
+        #5BA8D9 0%,
+        #4ECDC4 25%,
+        #A78BFA 50%,
+        #4ECDC4 75%,
+        #5BA8D9 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -290,7 +334,9 @@
   }
 
   @keyframes shimmer {
-    to { background-position: 200% center; }
+    to {
+      background-position: 200% center;
+    }
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -300,11 +346,9 @@
   /* Primary crystalline button */
   .crystal-button {
     position: relative;
-    background: linear-gradient(
-      135deg,
-      rgba(91, 168, 217, 0.9) 0%,
-      rgba(78, 205, 196, 0.8) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(91, 168, 217, 0.9) 0%,
+        rgba(78, 205, 196, 0.8) 100%);
     box-shadow:
       0 4px 15px rgba(91, 168, 217, 0.3),
       0 0 30px rgba(91, 168, 217, 0.15),
@@ -323,21 +367,17 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
     transition: left 0.5s ease;
   }
 
   .crystal-button:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(101, 178, 227, 1) 0%,
-      rgba(88, 215, 206, 0.9) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(101, 178, 227, 1) 0%,
+        rgba(88, 215, 206, 0.9) 100%);
     box-shadow:
       0 6px 25px rgba(91, 168, 217, 0.4),
       0 0 50px rgba(91, 168, 217, 0.2),
@@ -386,6 +426,7 @@
       transform: translateY(30px) scale(0.98);
       filter: blur(4px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0) scale(1);
@@ -404,6 +445,7 @@
       opacity: 0;
       transform: scale(0.95);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -416,16 +458,37 @@
   }
 
   @keyframes pulseGentle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
   }
 
   /* Stagger utilities */
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
-  .stagger-4 { animation-delay: 0.4s; }
-  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
 
   /* ═══════════════════════════════════════════════════════════
      STATUS INDICATORS
@@ -461,11 +524,9 @@
 
   /* Radial vignette for depth */
   .bg-radial-vignette {
-    background: radial-gradient(
-      ellipse 80% 60% at 50% 50%,
-      transparent 0%,
-      rgba(11, 18, 32, 0.4) 100%
-    );
+    background: radial-gradient(ellipse 80% 60% at 50% 50%,
+        transparent 0%,
+        rgba(11, 18, 32, 0.4) 100%);
   }
 
   /* Glow effect */
