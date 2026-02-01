@@ -1,19 +1,18 @@
 import os
 import json
-import google.generativeai as genai
+from google import genai
 from typing import List, Tuple
 from app.schemas import PurchaseOrder
 from app.core.config import get_settings
+import time
+import asyncio
 
 settings = get_settings()
 
+# Initialize Client
+client = None
 if settings.GEMINI_API_KEY:
-    genai.configure(api_key=settings.GEMINI_API_KEY)
-
-model = genai.GenerativeModel(settings.GEMINI_MODEL_NAME)
-
-import time
-import asyncio
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 class TokenBucket:
     """
@@ -48,25 +47,18 @@ class TokenBucket:
                 return
             
             # If no tokens, calculate wait time
-            # We need 1 token. We have self.tokens (likely < 1).
-            # Shortfall is 1 - self.tokens
             needed = 1 - self.tokens
             wait_time = needed / self.refill_rate
             
-            # Consume the future token now (to reserve our spot)
+            # Consume the future token now
             self.tokens -= 1
-            self.last_refill = now  # Reset time because we've effectively consumed forward
+            self.last_refill = now
             
-        # Wait outside the lock so others can queue up (though this implementation reserves first)
-        # Note: A strict FIFO queue would be more complex, but this "future reservation" 
-        # works well for simple rate limiting.
         if wait_time > 0:
             print(f"Rate limit reached. Waiting {wait_time:.2f}s...")
             await asyncio.sleep(wait_time)
 
-# Rate Limits for Gemini Free Tier (Safe estimate)
-# 15 requests per minute = 0.25 requests per second
-# Burst capacity = 5 requests
+# Rate Limits: 15 RPM
 rate_limiter = TokenBucket(capacity=5, refill_rate=0.25)
 
 PROMPT_TEMPLATE = """
@@ -121,13 +113,19 @@ async def parse_email_with_gemini(email_text: str) -> Tuple[List[PurchaseOrder],
     Parse one or multiple emails and return a list of PurchaseOrders.
     Returns a tuple of (parsed_orders, errors).
     """
-    if not settings.GEMINI_API_KEY:
-        raise Exception("GEMINI_API_KEY is not set")
+    if not client:
+        raise Exception("GEMINI_API_KEY is not set or client initialization failed")
         
     # Rate Limiting: Wait for token
     await rate_limiter.acquire()
 
-    response = model.generate_content(PROMPT_TEMPLATE.format(email_text=email_text))
+    try:
+        response = client.models.generate_content(
+            model=settings.GEMINI_MODEL_NAME,
+            contents=PROMPT_TEMPLATE.format(email_text=email_text)
+        )
+    except Exception as e:
+        return [], [f"Gemini API Error: {str(e)}"]
 
     parsed_orders: List[PurchaseOrder] = []
     errors: List[str] = []
@@ -162,7 +160,10 @@ async def parse_email_with_gemini(email_text: str) -> Tuple[List[PurchaseOrder],
 
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}")
-        print(f"Raw response: {response.text}")
+        try:
+            print(f"Raw response: {response.text}")
+        except:
+            pass
         errors.append(f"Failed to parse AI response as JSON: {str(e)}")
     except Exception as e:
         print(f"Error parsing Gemini response: {e}")
