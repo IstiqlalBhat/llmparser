@@ -781,15 +781,24 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Row reveal on scroll */
+  /* Row reveal on scroll - disabled on mobile for reliability */
   .row-reveal {
-    opacity: 0;
-    transform: translateY(10px);
+    opacity: 1;
+    transform: none;
   }
 
-  .row-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+  /* Only enable reveal animation on large screens where IntersectionObserver works reliably */
+  @media (min-width: 1024px) {
+    .row-reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .row-reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
