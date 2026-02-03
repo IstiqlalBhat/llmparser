@@ -58,27 +58,27 @@ const ALL_STATUSES = "all";
 const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; bgClass: string; borderClass: string }> = {
     "On Track": {
         icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-        color: "text-emerald-500 drop-shadow-[0_0_3px_rgba(16,185,129,0.4)]",
-        bgClass: "bg-emerald-500/10",
-        borderClass: "border-emerald-400/30",
+        color: "text-emerald-600 drop-shadow-[0_0_2px_rgba(16,185,129,0.3)]",
+        bgClass: "bg-emerald-500/15",
+        borderClass: "border-emerald-500/40",
     },
     "Shipped": {
         icon: <Truck className="w-3.5 h-3.5" />,
-        color: "text-sky-500 drop-shadow-[0_0_3px_rgba(14,165,233,0.4)]",
-        bgClass: "bg-sky-500/10",
-        borderClass: "border-sky-400/30",
+        color: "text-sky-600 drop-shadow-[0_0_2px_rgba(14,165,233,0.3)]",
+        bgClass: "bg-sky-500/15",
+        borderClass: "border-sky-500/40",
     },
     "Product Delays": {
         icon: <AlertTriangle className="w-3.5 h-3.5" />,
-        color: "text-amber-500 drop-shadow-[0_0_3px_rgba(245,158,11,0.4)]",
-        bgClass: "bg-amber-500/10",
-        borderClass: "border-amber-400/30",
+        color: "text-amber-600 drop-shadow-[0_0_2px_rgba(245,158,11,0.3)]",
+        bgClass: "bg-amber-500/15",
+        borderClass: "border-amber-500/40",
     },
     "Shipment Delay": {
         icon: <Clock className="w-3.5 h-3.5" />,
-        color: "text-rose-500 drop-shadow-[0_0_3px_rgba(239,68,68,0.4)]",
-        bgClass: "bg-rose-500/10",
-        borderClass: "border-rose-400/30",
+        color: "text-rose-600 drop-shadow-[0_0_2px_rgba(239,68,68,0.3)]",
+        bgClass: "bg-rose-500/15",
+        borderClass: "border-rose-500/40",
     },
 };
 
@@ -216,6 +216,24 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                     Delete ({selectedIds.size})
                                 </Button>
                             )}
+                            
+                            {/* Mobile Select All Button */}
+                            {filteredOrders.length > 0 && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={toggleSelectAll}
+                                    className="lg:hidden border-sky-400/30 text-sky-600 hover:bg-sky-500/10 hover:border-sky-400/50 h-10 rounded-xl touch-manipulation"
+                                >
+                                    <Checkbox
+                                        checked={isAllSelected}
+                                        onCheckedChange={toggleSelectAll}
+                                        className="w-5 h-5 mr-2 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 pointer-events-none"
+                                        {...(isSomeSelected ? { "data-state": "indeterminate" } : {})}
+                                    />
+                                    {isAllSelected ? "Deselect All" : "Select All"}
+                                </Button>
+                            )}
 
                             <div className="relative flex-1 sm:flex-none">
                                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -272,7 +290,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                             <Checkbox
                                 checked={isAllSelected}
                                 onCheckedChange={toggleSelectAll}
-                                className="data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500"
+                                className="w-5 h-5 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 touch-manipulation"
                                 {...(isSomeSelected ? { "data-state": "indeterminate" } : {})}
                             />
                         </div>
@@ -490,7 +508,7 @@ function OrderRow({
                     <Checkbox
                         checked={isSelected}
                         onCheckedChange={onToggleSelect}
-                        className="data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500"
+                        className="w-5 h-5 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 touch-manipulation"
                     />
                 </div>
 
@@ -602,7 +620,7 @@ function OrderRow({
                         <Checkbox
                             checked={isSelected}
                             onCheckedChange={onToggleSelect}
-                            className="data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500"
+                            className="w-5 h-5 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 touch-manipulation"
                         />
                         <div>
                             <span className="font-mono text-sm font-bold text-slate-800">

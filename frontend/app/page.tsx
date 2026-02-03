@@ -8,7 +8,7 @@ import { EditOrderDialog } from "@/components/edit-order-dialog";
 import { LiquidGlassCard, LiquidGlassStatCard, LiquidGlassLargeCard } from "@/components/liquid-glass-card";
 import { Toaster } from "sonner";
 import { useOrders } from "@/hooks/use-orders";
-import { Package, Zap, TrendingUp, Clock, Layers, AlertTriangle } from "lucide-react";
+import { Package, Zap, TrendingUp, Clock, Layers, AlertTriangle, Shield } from "lucide-react";
 import { PurchaseOrder } from "@/types";
 
 // Dynamically import Three.js background to avoid SSR issues
@@ -214,17 +214,17 @@ function StatCard({
 }) {
   return (
     <LiquidGlassStatCard delay={delay}>
-      <div className="p-4">
-        <div className="flex flex-row items-center gap-3">
-          <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110`}>
+      <div className="p-3">
+        <div className="flex flex-row items-center gap-2.5">
+          <div className={`w-9 h-9 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110`}>
             <span className={color}>{icon}</span>
           </div>
           <div className="min-w-0 flex flex-col">
-            <p className="text-[11px] text-slate-700 font-extrabold uppercase tracking-wide truncate">
+            <p className="text-[10px] text-slate-700 font-bold uppercase tracking-wide leading-tight">
               {label}
             </p>
             <p
-              className={`text-2xl font-bold ${color} leading-none mt-0.5`}
+              className={`text-xl font-bold ${color} leading-none mt-0.5`}
               style={{ fontFamily: "var(--font-display)" }}
             >
               {value}
@@ -236,6 +236,8 @@ function StatCard({
   );
 }
 
+
+
 function SystemStatus() {
   return (
     <LiquidGlassCard
@@ -245,10 +247,10 @@ function SystemStatus() {
     >
       <div className="flex items-center gap-2.5">
         <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-600" />
         </span>
-        <span className="text-emerald-600 text-xs font-semibold tracking-wide">
+        <span className="text-slate-800 text-xs font-bold tracking-wide">
           System Operational
         </span>
       </div>
