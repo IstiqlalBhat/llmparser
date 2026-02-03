@@ -197,8 +197,8 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 variant="large"
                 interactive={false}
                 glowOnHover={false}
-                className="flex flex-col h-[72vh] min-h-[420px] max-h-[720px] sm:min-h-[480px] lg:min-h-[560px] xl:h-[clamp(600px,70vh,760px)] xl:max-h-none"
-                contentClassName="flex flex-col h-full min-h-0"
+                className="flex flex-col h-[72vh] min-h-[420px] max-h-[720px] sm:min-h-[480px] lg:min-h-[560px] xl:h-[clamp(600px,70vh,760px)] xl:max-h-none overflow-hidden"
+                contentClassName="flex flex-col h-full min-h-0 overflow-hidden"
             >
                 {/* Header */}
                 <div className="px-4 py-5 sm:px-6 border-b border-white/40 relative overflow-hidden shrink-0">
@@ -329,7 +329,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 {/* Table Content */}
                 <div
                     ref={tableScrollRef}
-                    className="overflow-y-auto flex-1 min-h-0 custom-scrollbar table-scroll-area overscroll-contain touch-pan-y"
+                    className="overflow-y-auto overflow-x-hidden flex-1 min-h-0 custom-scrollbar table-scroll-area overscroll-contain touch-pan-y w-full"
                 >
                     {/* Table header */}
                     <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/60 border-b border-white/40 text-xs font-extrabold text-slate-700 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
