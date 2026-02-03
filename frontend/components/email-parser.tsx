@@ -181,7 +181,7 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
             {/* Content */}
             <div className="p-5 flex-1 flex flex-col gap-5 overflow-y-auto custom-scrollbar min-h-0">
                 {/* Textarea */}
-                <div className="relative group">
+                <div className="relative group flex-1 flex flex-col min-h-[200px]">
                     <div className="absolute top-3.5 left-3.5 text-slate-400 group-focus-within:text-sky-500 transition-colors z-10">
                         <FileText className="w-4 h-4" />
                     </div>
@@ -193,7 +193,7 @@ Example:
 Subject: PO #12345 Confirmation
 From: supplier@acme.com
 Your order has been confirmed..."
-                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-500 placeholder:font-medium pl-10 [field-sizing:fixed] h-[250px] focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/10"
+                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-500 placeholder:font-medium pl-10 [field-sizing:fixed] h-full focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/10"
                         value={emailText}
                         onChange={(e) => setEmailText(e.target.value)}
                         disabled={isParsing}
@@ -309,7 +309,7 @@ Your order has been confirmed..."
                 )}
 
                 {/* Actions Area */}
-                <div className="mt-auto pt-2">
+                <div className="pt-2 shrink-0">
                     {!hasResults ? (
                         <div className="flex flex-col gap-3">
                             <Button

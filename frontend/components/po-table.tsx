@@ -247,7 +247,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                     Delete ({selectedIds.size})
                                 </Button>
                             )}
-                            
+
                             {/* Mobile Select All Button */}
                             {filteredOrders.length > 0 && (
                                 <Button
@@ -332,7 +332,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                     className="overflow-y-auto flex-1 min-h-0 custom-scrollbar table-scroll-area overscroll-contain touch-pan-y"
                 >
                     {/* Table header */}
-                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/90 border-b border-white/50 text-xs font-extrabold text-slate-700 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
+                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/60 border-b border-white/40 text-xs font-extrabold text-slate-700 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
                         <div className="col-span-1 flex items-center justify-center">
                             <Checkbox
                                 checked={isAllSelected}
@@ -544,8 +544,8 @@ function OrderRow({
         <div
             data-row
             className={`group row-reveal px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 border-l-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${isSelected
-                    ? 'bg-sky-200/25 border-l-sky-500'
-                    : 'bg-white/25 hover:bg-white/35 border-l-transparent'
+                ? 'bg-sky-200/15 border-l-sky-500'
+                : 'bg-white/15 hover:bg-white/25 border-l-transparent'
                 }`}
             style={{ animationDelay: `${index * 0.05}s` }}
         >
@@ -576,7 +576,7 @@ function OrderRow({
                         label="Supplier"
                         text={order.supplier}
                         triggerClassName="text-sm font-semibold text-slate-800 truncate"
-                        contentClassName="w-[min(420px,calc(100vw-24px))]"
+                        contentClassName="max-w-[min(420px,calc(100vw-24px))]"
                     />
                 </div>
 
@@ -586,7 +586,7 @@ function OrderRow({
                         label="Items"
                         text={order.items}
                         triggerClassName="text-sm text-slate-700 leading-snug line-clamp-2"
-                        contentClassName="w-[min(520px,calc(100vw-24px))]"
+                        contentClassName="max-w-[min(520px,calc(100vw-24px))]"
                     />
                 </div>
 
@@ -624,18 +624,18 @@ function OrderRow({
                 </div>
 
                 {/* Actions */}
-                    <div className="col-span-2 flex items-center justify-end gap-1">
-                        {order.additional_context && (
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8 text-amber-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-amber-800 hover:bg-white/45 rounded-lg"
-                                    >
-                                        <FileText className="w-4 h-4" />
-                                    </Button>
-                                </PopoverTrigger>
+                <div className="col-span-2 flex items-center justify-end gap-1">
+                    {order.additional_context && (
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-amber-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-amber-800 hover:bg-white/45 rounded-lg"
+                                >
+                                    <FileText className="w-4 h-4" />
+                                </Button>
+                            </PopoverTrigger>
                             <PopoverContent className="w-80 p-0 !bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-2xl !shadow-xl ml-4">
                                 <div className="bg-amber-500/10 px-4 py-3 border-b border-amber-400/20 rounded-t-2xl">
                                     <div className="flex items-center gap-2">
@@ -669,7 +669,7 @@ function OrderRow({
             </div>
 
             {/* Mobile / Tablet layout */}
-                <div className="lg:hidden flex flex-col gap-3">
+            <div className="lg:hidden flex flex-col gap-3">
                 {/* Row 1: Checkbox, ID, Actions */}
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -688,7 +688,7 @@ function OrderRow({
                                     label="Supplier"
                                     text={order.supplier}
                                     triggerClassName="text-xs font-medium text-slate-600 truncate"
-                                    contentClassName="w-[min(420px,calc(100vw-24px))]"
+                                    contentClassName="max-w-[min(420px,calc(100vw-24px))]"
                                 />
                             </div>
                         </div>
@@ -721,7 +721,7 @@ function OrderRow({
                         label="Items"
                         text={order.items}
                         triggerClassName="line-clamp-2 leading-relaxed text-left"
-                        contentClassName="w-[min(520px,calc(100vw-24px))]"
+                        contentClassName="max-w-[min(520px,calc(100vw-24px))]"
                     />
                 </div>
 
@@ -809,29 +809,36 @@ function TextReveal({
             <HoverCardContent
                 side="top"
                 align="start"
-                sideOffset={8}
+                sideOffset={10}
                 className={cn(
-                    "p-0 rounded-2xl border border-white/50 overflow-hidden",
+                    "p-0 w-fit rounded-2xl border border-white/60 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200",
                     contentClassName
                 )}
                 style={{
-                    background: "linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.75) 100%)",
-                    backdropFilter: "blur(32px) saturate(180%)",
-                    WebkitBackdropFilter: "blur(32px) saturate(180%)",
-                    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+                    background: "linear-gradient(145deg, rgba(255,255,255,0.92) 0%, rgba(248,250,252,0.85) 50%, rgba(241,245,249,0.80) 100%)",
+                    backdropFilter: "blur(40px) saturate(200%)",
+                    WebkitBackdropFilter: "blur(40px) saturate(200%)",
+                    boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.02)",
                 }}
             >
-                {/* Header bar */}
-                <div className="px-4 py-2.5 border-b border-white/40 flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-sky-500" />
-                    <span className="text-[10px] font-extrabold tracking-[0.18em] uppercase text-slate-600">
+                {/* Gradient accent bar */}
+                <div className="h-1 bg-gradient-to-r from-sky-400 via-cyan-400 to-sky-500" />
+
+                {/* Header */}
+                <div className="px-4 py-3 bg-gradient-to-b from-white/50 to-transparent border-b border-white/30 flex items-center gap-2.5">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-br from-sky-400 to-cyan-500 shadow-sm shadow-sky-400/40 animate-pulse" />
+                    <span className="text-[11px] font-bold tracking-widest uppercase text-slate-500">
                         {label}
                     </span>
                 </div>
+
                 {/* Content */}
-                <div className="p-4 text-sm text-slate-800 font-medium leading-relaxed max-h-60 overflow-y-auto custom-scrollbar break-words">
+                <div className="px-4 py-4 text-[15px] text-slate-800 font-semibold leading-relaxed max-h-64 overflow-y-auto custom-scrollbar break-words">
                     {text}
                 </div>
+
+                {/* Bottom shine */}
+                <div className="h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
             </HoverCardContent>
         </HoverCard>
     );
