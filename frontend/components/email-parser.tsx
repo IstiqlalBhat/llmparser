@@ -193,7 +193,7 @@ Example:
 Subject: PO #12345 Confirmation
 From: supplier@acme.com
 Your order has been confirmed..."
-                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-400 pl-10 [field-sizing:fixed] h-[250px] focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/10"
+                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-500 placeholder:font-medium pl-10 [field-sizing:fixed] h-[250px] focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/10"
                         value={emailText}
                         onChange={(e) => setEmailText(e.target.value)}
                         disabled={isParsing}
