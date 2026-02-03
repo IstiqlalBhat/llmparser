@@ -191,7 +191,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                 >
                                     Purchase Orders
                                 </h2>
-                                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-semibold mt-0.5">
+                                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-700 font-bold mt-0.5">
                                     <span>{filteredOrders.length} orders</span>
                                     {selectedIds.size > 0 && (
                                         <>
@@ -267,7 +267,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 {/* Table Content */}
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     {/* Table header */}
-                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/80 border-b border-white/50 text-xs font-extrabold text-slate-600 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
+                    <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/90 border-b border-white/50 text-xs font-extrabold text-slate-700 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
                         <div className="col-span-1 flex items-center">
                             <Checkbox
                                 checked={isAllSelected}
@@ -297,14 +297,14 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                     <Package className="w-10 h-10 text-slate-400" />
                                 </LiquidGlassCard>
                                 <p
-                                    className="text-slate-800 font-bold text-lg"
+                                    className="text-slate-900 font-bold text-lg"
                                     style={{ fontFamily: "var(--font-display)" }}
                                 >
                                     {orders.length === 0
                                         ? "No orders found"
                                         : "No matching orders"}
                                 </p>
-                                <p className="text-sm text-slate-600 font-medium mt-2 max-w-xs mx-auto">
+                                <p className="text-sm text-slate-700 font-semibold mt-2 max-w-xs mx-auto">
                                     {orders.length === 0
                                         ? "Paste a supplier email in the parser to get started."
                                         : "Try adjusting your search criteria or status filter."}
@@ -347,7 +347,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                 <DialogTitle className="text-xl" style={{ fontFamily: "var(--font-display)" }}>
                                     Delete Order?
                                 </DialogTitle>
-                                <DialogDescription className="text-slate-600 mt-1">
+                                <DialogDescription className="text-slate-700 mt-1">
                                     This action is permanent and cannot be undone.
                                 </DialogDescription>
                             </div>
@@ -406,7 +406,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                 <DialogTitle className="text-xl" style={{ fontFamily: "var(--font-display)" }}>
                                     Delete {selectedIds.size} Orders?
                                 </DialogTitle>
-                                <DialogDescription className="text-slate-600 mt-1">
+                                <DialogDescription className="text-slate-700 mt-1">
                                     Are you sure you want to delete these orders? This action cannot be undone.
                                 </DialogDescription>
                             </div>
@@ -511,7 +511,7 @@ function OrderRow({
 
                 {/* Items */}
                 <div className="col-span-3">
-                    <p className="text-sm text-slate-600 truncate" title={order.items}>
+                    <p className="text-sm text-slate-700 truncate" title={order.items}>
                         {order.items}
                     </p>
                 </div>

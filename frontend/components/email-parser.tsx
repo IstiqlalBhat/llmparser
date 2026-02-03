@@ -171,7 +171,7 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
                         >
                             Email Parser
                         </h2>
-                        <p className="text-xs text-slate-600 font-semibold mt-0.5">
+                        <p className="text-xs text-slate-700 font-bold mt-0.5">
                             AI-powered document processing
                         </p>
                     </div>
@@ -332,7 +332,7 @@ Your order has been confirmed..."
                             <Button
                                 onClick={handleManualEntry}
                                 variant="ghost"
-                                className="w-full h-10 text-xs text-slate-500 hover:text-sky-600 ghost-glow rounded-xl"
+                                className="w-full h-10 text-xs text-slate-600 hover:text-sky-600 ghost-glow rounded-xl"
                             >
                                 <Plus className="w-3.5 h-3.5 mr-1.5" />
                                 Manual Entry
@@ -379,7 +379,7 @@ Your order has been confirmed..."
                             <AlertTriangle className="w-5 h-5" />
                             Overwrite Existing Order?
                         </AlertDialogTitle>
-                        <AlertDialogDescription className="text-slate-600">
+                        <AlertDialogDescription className="text-slate-700">
                             An order with ID <span className="font-semibold text-slate-800">{pendingOrder?.id}</span> already exists in the database.
                             Do you want to overwrite it with the new data?
                         </AlertDialogDescription>

@@ -79,7 +79,7 @@ export default function Home() {
                 >
                   <Layers className="w-6 h-6 text-sky-600" />
                 </LiquidGlassCard>
-                <span className="text-sm font-extrabold tracking-[0.2em] uppercase text-slate-600">
+                <span className="text-sm font-extrabold tracking-[0.2em] uppercase text-slate-800">
                   Supply Chain Intelligence
                 </span>
               </div>
@@ -93,7 +93,7 @@ export default function Home() {
               </h1>
 
               {/* Subtitle */}
-              <p className="mt-5 text-slate-600 font-medium text-lg lg:text-xl leading-relaxed text-balance max-w-xl">
+              <p className="mt-5 text-slate-700 font-semibold text-lg lg:text-xl leading-relaxed text-balance max-w-xl">
                 AI-powered purchase order management. Parse supplier emails, track shipments,
                 and stay ahead of delays with intelligent automation.
               </p>
@@ -173,11 +173,11 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-20 pt-8 border-t border-slate-300/50">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-            <p className="flex items-center gap-3 text-slate-600 font-medium">
-              <span className="font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
+            <p className="flex items-center gap-3 text-slate-700 font-semibold">
+              <span className="font-bold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>
                 Orbital
               </span>
-              <span className="w-1 h-1 rounded-full bg-slate-400" />
+              <span className="w-1 h-1 rounded-full bg-slate-500" />
               <span>Intelligent supply chain management</span>
             </p>
             <SystemStatus />
@@ -220,7 +220,7 @@ function StatCard({
             <span className={color}>{icon}</span>
           </div>
           <div className="min-w-0 flex flex-col">
-            <p className="text-[11px] text-slate-600 font-extrabold uppercase tracking-wide truncate">
+            <p className="text-[11px] text-slate-700 font-extrabold uppercase tracking-wide truncate">
               {label}
             </p>
             <p

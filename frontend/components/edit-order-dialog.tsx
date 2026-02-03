@@ -97,7 +97,7 @@ export function EditOrderDialog({
                             >
                                 {title}
                             </DialogTitle>
-                            <DialogDescription className="text-slate-600 mt-0.5">
+                            <DialogDescription className="text-slate-700 font-medium mt-0.5">
                                 Enter the purchase order details below.
                             </DialogDescription>
                         </div>
@@ -201,7 +201,7 @@ export function EditOrderDialog({
                     <div className="space-y-2">
                         <Label htmlFor="context" className="text-sm font-medium text-slate-800">
                             Additional Context
-                            <span className="text-slate-500 font-normal ml-1">(optional)</span>
+                            <span className="text-slate-600 font-normal ml-1">(optional)</span>
                         </Label>
                         <Textarea
                             id="context"
