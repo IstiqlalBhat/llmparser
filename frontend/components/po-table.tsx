@@ -197,11 +197,11 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 variant="large"
                 interactive={false}
                 glowOnHover={false}
-                className="flex flex-col h-[72vh] min-h-[420px] max-h-[720px] sm:min-h-[480px] lg:min-h-[560px] xl:h-[clamp(600px,70vh,760px)] xl:max-h-none overflow-hidden"
+                className="flex flex-col h-[72vh] min-h-[320px] max-h-[720px] sm:min-h-[480px] lg:min-h-[560px] xl:h-[clamp(600px,70vh,760px)] xl:max-h-none overflow-hidden"
                 contentClassName="flex flex-col h-full min-h-0 overflow-hidden"
             >
                 {/* Header */}
-                <div className="px-4 py-5 sm:px-6 border-b border-white/40 relative overflow-hidden shrink-0">
+                <div className="px-3 py-3 sm:px-6 sm:py-5 border-b border-white/40 relative overflow-hidden shrink-0">
                     {/* Header gradient accent */}
                     <div className="absolute inset-0 bg-gradient-to-r from-sky-500/5 via-transparent to-amber-500/5" />
 
@@ -235,26 +235,14 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                         </div>
 
                         {/* Filters & Actions */}
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
-                            {selectedIds.size > 0 && (
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handleBulkDeleteClick}
-                                    className="border-rose-400/30 text-rose-500 hover:bg-rose-500/10 hover:border-rose-400/50 w-full sm:w-auto h-10 sm:h-9 rounded-xl"
-                                >
-                                    <Trash2 className="w-4 h-4 mr-2" />
-                                    Delete ({selectedIds.size})
-                                </Button>
-                            )}
-
-                            {/* Mobile Select All Button */}
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full lg:w-auto">
+                            {/* Mobile Select All Button - compact inline */}
                             {filteredOrders.length > 0 && (
                                 <Button
                                     asChild
                                     variant="outline"
                                     size="sm"
-                                    className="lg:hidden border-sky-400/30 text-sky-600 hover:bg-sky-500/10 hover:border-sky-400/50 h-10 rounded-xl touch-manipulation"
+                                    className="lg:hidden border-sky-400/30 text-sky-600 hover:bg-sky-500/10 hover:border-sky-400/50 h-9 px-3 rounded-xl touch-manipulation"
                                 >
                                     <div
                                         role="button"
@@ -266,62 +254,73 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                                 toggleSelectAll();
                                             }
                                         }}
-                                        className="flex items-center justify-center w-full"
+                                        className="flex items-center justify-center"
                                     >
                                         <Checkbox
                                             checked={isAllSelected}
                                             onCheckedChange={toggleSelectAll}
-                                            className="w-5 h-5 mr-2 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 pointer-events-none"
+                                            className="w-4 h-4 mr-1.5 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 pointer-events-none"
                                             {...(isSomeSelected ? { "data-state": "indeterminate" } : {})}
                                         />
-                                        {isAllSelected ? "Deselect All" : "Select All"}
+                                        <span className="text-xs">{isAllSelected ? "Deselect" : "Select All"}</span>
                                     </div>
                                 </Button>
                             )}
 
-                            <div className="relative flex-1 sm:flex-none">
-                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            {selectedIds.size > 0 && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleBulkDeleteClick}
+                                    className="border-rose-400/30 text-rose-500 hover:bg-rose-500/10 hover:border-rose-400/50 h-9 px-3 rounded-xl"
+                                >
+                                    <Trash2 className="w-4 h-4 sm:mr-2" />
+                                    <span className="hidden sm:inline">Delete ({selectedIds.size})</span>
+                                    <span className="sm:hidden text-xs">({selectedIds.size})</span>
+                                </Button>
+                            )}
+
+                            <div className="relative flex-1 min-w-[120px] sm:flex-none">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                                 <Input
-                                    placeholder="Search orders..."
+                                    placeholder="Search..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10 w-full sm:w-64 glass-input rounded-xl h-10 sm:h-9 text-sm focus:border-sky-400/40 focus:ring-2 focus:ring-sky-400/10"
+                                    className="pl-9 w-full sm:w-56 glass-input rounded-xl h-9 text-sm focus:border-sky-400/40 focus:ring-2 focus:ring-sky-400/10"
                                 />
                             </div>
 
-                            <div className="flex gap-2 w-full sm:w-auto">
-                                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                    <SelectTrigger className="w-full sm:w-44 glass-input rounded-xl h-10 sm:h-9">
-                                        <div className="flex items-center gap-2 truncate">
-                                            <Filter className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                                            <SelectValue placeholder="Status" />
-                                        </div>
-                                    </SelectTrigger>
-                                    <SelectContent className="!bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-2xl !shadow-xl" position="popper" sideOffset={4}>
-                                        <SelectItem value={ALL_STATUSES}>All Statuses</SelectItem>
-                                        {Object.entries(statusConfig).map(([status, config]) => (
-                                            <SelectItem key={status} value={status}>
-                                                <span className="flex items-center gap-2">
-                                                    <span className={config.color}>{config.icon}</span>
-                                                    {status}
-                                                </span>
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="w-[110px] sm:w-44 glass-input rounded-xl h-9">
+                                    <div className="flex items-center gap-1.5 truncate">
+                                        <Filter className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                                        <span className="text-xs sm:text-sm"><SelectValue placeholder="Status" /></span>
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent className="!bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-2xl !shadow-xl" position="popper" sideOffset={4}>
+                                    <SelectItem value={ALL_STATUSES}>All Statuses</SelectItem>
+                                    {Object.entries(statusConfig).map(([status, config]) => (
+                                        <SelectItem key={status} value={status}>
+                                            <span className="flex items-center gap-2">
+                                                <span className={config.color}>{config.icon}</span>
+                                                {status}
+                                            </span>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
 
-                                {hasActiveFilters && (
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={clearFilters}
-                                        className="ghost-glow flex-shrink-0 rounded-xl h-10 w-10 sm:h-9 sm:w-9"
-                                        title="Clear filters"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </Button>
-                                )}
-                            </div>
+                            {hasActiveFilters && (
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={clearFilters}
+                                    className="ghost-glow flex-shrink-0 rounded-xl h-9 w-9"
+                                    title="Clear filters"
+                                >
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>
