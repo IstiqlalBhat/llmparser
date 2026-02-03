@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { EmailParser } from "@/components/email-parser";
 import { POTable } from "@/components/po-table";
 import { EditOrderDialog } from "@/components/edit-order-dialog";
+import { LiquidGlassCard, LiquidGlassStatCard, LiquidGlassLargeCard } from "@/components/liquid-glass-card";
 import { Toaster } from "sonner";
 import { useOrders } from "@/hooks/use-orders";
 import { Package, Zap, TrendingUp, Clock, Layers, AlertTriangle } from "lucide-react";
@@ -46,16 +47,19 @@ export default function Home() {
       {/* Three.js Animated Background */}
       {mounted && <SkyBackground />}
 
-      {/* Toaster with glass styling */}
+      {/* Toaster with liquid glass styling */}
       <Toaster
         position="top-right"
         toastOptions={{
-          className: "glass-card",
+          className: "!bg-white/80 !backdrop-blur-xl !border-white/60 !shadow-xl !rounded-2xl",
           style: {
-            background: "rgba(255, 255, 255, 0.9)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(255, 255, 255, 0.5)",
-            color: "#1e293b",
+            background: "rgba(255, 255, 255, 0.85)",
+            backdropFilter: "blur(24px) saturate(180%)",
+            WebkitBackdropFilter: "blur(24px) saturate(180%)",
+            border: "1px solid rgba(255, 255, 255, 0.6)",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+            color: "#1a202c",
+            borderRadius: "1.25rem",
           },
         }}
       />
@@ -67,10 +71,15 @@ export default function Home() {
             <div className="max-w-2xl">
               {/* Brand Tag */}
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center glow-sm">
-                  <Layers className="w-6 h-6 text-primary" />
-                </div>
-                <span className="text-sm font-extrabold tracking-[0.2em] uppercase text-slate-700">
+                <LiquidGlassCard
+                  variant="stat"
+                  interactive={false}
+                  className="w-12 h-12 !rounded-2xl"
+                  contentClassName="flex items-center justify-center"
+                >
+                  <Layers className="w-6 h-6 text-sky-600" />
+                </LiquidGlassCard>
+                <span className="text-sm font-extrabold tracking-[0.2em] uppercase text-slate-600">
                   Supply Chain Intelligence
                 </span>
               </div>
@@ -90,7 +99,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Stats Grid */}
+            {/* Stats Grid with Liquid Glass */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 w-full xl:w-auto xl:min-w-[600px]">
               <StatCard
                 icon={<Package className="w-5 h-5" />}
@@ -162,7 +171,7 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-20 pt-8 border-t border-slate-300/60">
+        <footer className="mt-20 pt-8 border-t border-slate-300/50">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
             <p className="flex items-center gap-3 text-slate-600 font-medium">
               <span className="font-bold text-slate-800" style={{ fontFamily: "var(--font-display)" }}>
@@ -204,23 +213,14 @@ function StatCard({
   delay: number;
 }) {
   return (
-    <div
-      className="liquid-glass cursor-default group float-up"
-      style={{ animationDelay: `${0.3 + delay * 0.1}s` }}
-    >
-      {/* Liquid Glass Layers */}
-      <div className="liquid-glass-effect" />
-      <div className="liquid-glass-tint" />
-      <div className="liquid-glass-shine" />
-
-      {/* Content */}
-      <div className="liquid-glass-content p-4">
+    <LiquidGlassStatCard delay={delay}>
+      <div className="p-4">
         <div className="flex flex-row items-center gap-3">
           <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110`}>
             <span className={color}>{icon}</span>
           </div>
           <div className="min-w-0 flex flex-col">
-            <p className="text-[11px] text-slate-700 font-extrabold uppercase tracking-wide truncate">
+            <p className="text-[11px] text-slate-600 font-extrabold uppercase tracking-wide truncate">
               {label}
             </p>
             <p
@@ -232,43 +232,52 @@ function StatCard({
           </div>
         </div>
       </div>
-    </div>
+    </LiquidGlassStatCard>
   );
 }
 
 function SystemStatus() {
   return (
-    <div className="flex items-center gap-2.5 px-4 py-2 rounded-full glass-surface border border-emerald-500/40">
-      <span className="relative flex h-2.5 w-2.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-      </span>
-      <span className="text-emerald-600 text-xs font-semibold tracking-wide">
-        System Operational
-      </span>
-    </div>
+    <LiquidGlassCard
+      variant="stat"
+      interactive={false}
+      className="!px-4 !py-2"
+    >
+      <div className="flex items-center gap-2.5">
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+        </span>
+        <span className="text-emerald-600 text-xs font-semibold tracking-wide">
+          System Operational
+        </span>
+      </div>
+    </LiquidGlassCard>
   );
 }
 
 function LoadingSkeleton() {
   return (
-    <div className="glass-card p-6 lg:p-8 space-y-8">
+    <LiquidGlassLargeCard
+      className="p-6 lg:p-8"
+      contentClassName="space-y-8"
+    >
       <div className="flex items-center justify-between">
-        <div className="h-8 w-48 glass-surface rounded-xl animate-pulse" />
+        <div className="h-8 w-48 rounded-xl bg-slate-200/80 animate-pulse" />
         <div className="flex gap-3">
-          <div className="h-10 w-64 glass-surface rounded-xl animate-pulse" />
-          <div className="h-10 w-32 glass-surface rounded-xl animate-pulse" />
+          <div className="h-10 w-64 rounded-xl bg-slate-200/80 animate-pulse" />
+          <div className="h-10 w-32 rounded-xl bg-slate-200/80 animate-pulse" />
         </div>
       </div>
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
           <div
             key={i}
-            className="h-20 glass-surface rounded-xl animate-pulse"
+            className="h-20 rounded-xl bg-slate-200/80 animate-pulse"
             style={{ animationDelay: `${i * 0.1}s`, opacity: 1 - i * 0.15 }}
           />
         ))}
       </div>
-    </div>
+    </LiquidGlassLargeCard>
   );
 }

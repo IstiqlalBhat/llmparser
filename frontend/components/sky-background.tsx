@@ -96,6 +96,9 @@ export function SkyBackground() {
         <div
             ref={vantaRef}
             className="fixed inset-0 -z-10"
+            style={{
+                background: "linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%)"
+            }}
         />
     );
 }

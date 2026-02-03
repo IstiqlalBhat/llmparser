@@ -8,6 +8,7 @@ import { PurchaseOrder } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
 import { EditOrderDialog } from "@/components/edit-order-dialog";
+import { LiquidGlassCard } from "@/components/liquid-glass-card";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -142,16 +143,27 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const hasResults = parsedOrders.length > 0 || parseErrors.length > 0;
 
     return (
-        <div className="glass-card overflow-hidden flex flex-col border-primary/10">
+        <LiquidGlassCard
+            variant="large"
+            interactive={false}
+            glowOnHover={false}
+            className="flex-col h-full min-h-[600px]"
+            contentClassName="flex flex-col h-full"
+        >
             {/* Header */}
-            <div className="px-5 py-5 border-b border-border/50 relative overflow-hidden">
+            <div className="px-5 py-5 border-b border-white/40 relative overflow-hidden shrink-0">
                 {/* Header gradient accent */}
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-sky-500/5 via-cyan-500/5 to-transparent" />
 
                 <div className="relative flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl glass-surface flex items-center justify-center border border-primary/20 glow-sm">
-                        <Mail className="w-6 h-6 text-primary" />
-                    </div>
+                    <LiquidGlassCard
+                        variant="stat"
+                        interactive={false}
+                        className="w-12 h-12 !rounded-2xl shrink-0"
+                        contentClassName="flex items-center justify-center"
+                    >
+                        <Mail className="w-6 h-6 text-sky-600" />
+                    </LiquidGlassCard>
                     <div>
                         <h2
                             className="text-xl font-bold text-slate-800 tracking-tight"
@@ -167,10 +179,10 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
             </div>
 
             {/* Content */}
-            <div className="p-5 flex-1 flex flex-col gap-5 overflow-y-auto custom-scrollbar">
+            <div className="p-5 flex-1 flex flex-col gap-5 overflow-y-auto custom-scrollbar min-h-0">
                 {/* Textarea */}
                 <div className="relative group">
-                    <div className="absolute top-3.5 left-3.5 text-muted-foreground/40 group-focus-within:text-primary/70 transition-colors z-10">
+                    <div className="absolute top-3.5 left-3.5 text-slate-400 group-focus-within:text-sky-500 transition-colors z-10">
                         <FileText className="w-4 h-4" />
                     </div>
                     <Textarea
@@ -181,13 +193,13 @@ Example:
 Subject: PO #12345 Confirmation
 From: supplier@acme.com
 Your order has been confirmed..."
-                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-500 pl-10 [field-sizing:fixed] h-[250px] focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+                        className="resize-none glass-input rounded-xl text-sm text-slate-800 placeholder:text-slate-400 pl-10 [field-sizing:fixed] h-[250px] focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/10"
                         value={emailText}
                         onChange={(e) => setEmailText(e.target.value)}
                         disabled={isParsing}
                     />
                     {emailText && !hasResults && !isParsing && (
-                        <div className="absolute bottom-3 right-3 text-[10px] font-medium text-muted-foreground glass-surface px-2.5 py-1 rounded-full">
+                        <div className="absolute bottom-3 right-3 text-[10px] font-medium text-slate-500 glass-surface px-2.5 py-1 rounded-full">
                             {emailText.length} chars
                         </div>
                     )}
@@ -195,12 +207,16 @@ Your order has been confirmed..."
                     {/* Loading Overlay */}
                     {isParsing && (
                         <div className="absolute inset-0 z-10 glass-surface rounded-xl flex flex-col items-center justify-center">
-                            <div className="glass-card p-4 rounded-2xl border border-primary/20 mb-4 glow-md">
-                                <Cpu className="w-8 h-8 text-primary animate-pulse" />
-                            </div>
+                            <LiquidGlassCard
+                                variant="stat"
+                                interactive={false}
+                                className="p-4 !rounded-2xl mb-4"
+                            >
+                                <Cpu className="w-8 h-8 text-sky-600 animate-pulse" />
+                            </LiquidGlassCard>
                             <div className="flex items-center space-x-2.5">
-                                <Loader2 className="w-4 h-4 text-primary animate-spin" />
-                                <span className="text-sm font-medium text-primary">Analyzing content...</span>
+                                <Loader2 className="w-4 h-4 text-sky-600 animate-spin" />
+                                <span className="text-sm font-medium text-sky-600">Analyzing content...</span>
                             </div>
                         </div>
                     )}
@@ -208,26 +224,26 @@ Your order has been confirmed..."
 
                 {/* Error display */}
                 {error && (
-                    <div className="flex items-start gap-3 p-4 rounded-xl glass-surface border border-destructive/30 scale-in">
-                        <div className="w-9 h-9 rounded-lg bg-destructive/20 flex items-center justify-center flex-shrink-0">
-                            <X className="w-4 h-4 text-destructive" />
+                    <div className="flex items-start gap-3 p-4 rounded-xl glass-surface border border-rose-400/30 scale-in">
+                        <div className="w-9 h-9 rounded-xl bg-rose-500/20 flex items-center justify-center flex-shrink-0">
+                            <X className="w-4 h-4 text-rose-500" />
                         </div>
                         <div>
-                            <p className="font-medium text-destructive text-sm">Parsing failed</p>
-                            <p className="text-sm text-destructive/80 mt-1">{error}</p>
+                            <p className="font-medium text-rose-600 text-sm">Parsing failed</p>
+                            <p className="text-sm text-rose-500/80 mt-1">{error}</p>
                         </div>
                     </div>
                 )}
 
                 {/* Parse warnings/errors */}
                 {parseErrors.length > 0 && (
-                    <div className="flex items-start gap-3 p-4 rounded-xl glass-surface border border-amber-500/30 scale-in">
-                        <div className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-                            <Sparkles className="w-4 h-4 text-amber-400" />
+                    <div className="flex items-start gap-3 p-4 rounded-xl glass-surface border border-amber-400/30 scale-in">
+                        <div className="w-9 h-9 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                            <Sparkles className="w-4 h-4 text-amber-500" />
                         </div>
                         <div>
-                            <p className="font-medium text-amber-400 text-sm">Review Needed</p>
-                            <ul className="text-sm text-amber-400/80 mt-1 list-disc list-inside space-y-0.5">
+                            <p className="font-medium text-amber-600 text-sm">Review Needed</p>
+                            <ul className="text-sm text-amber-600/80 mt-1 list-disc list-inside space-y-0.5">
                                 {parseErrors.map((err, i) => (
                                     <li key={i}>{err}</li>
                                 ))}
@@ -241,19 +257,25 @@ Your order has been confirmed..."
                     <div className="space-y-4 scale-in">
                         {/* Results header with bulk actions */}
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass-surface border border-emerald-500/30">
-                                <Cpu className="w-3.5 h-3.5 text-emerald-400" />
-                                <span className="text-xs font-semibold text-emerald-400">
-                                    {parsedOrders.length} Found
-                                </span>
-                            </div>
+                            <LiquidGlassCard
+                                variant="stat"
+                                interactive={false}
+                                className="!px-3 !py-1.5"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <Cpu className="w-3.5 h-3.5 text-emerald-500" />
+                                    <span className="text-xs font-semibold text-emerald-600">
+                                        {parsedOrders.length} Found
+                                    </span>
+                                </div>
+                            </LiquidGlassCard>
 
                             {parsedOrders.length > 1 && (
                                 <div className="flex gap-2">
                                     <Button
                                         onClick={handleAcceptAll}
                                         size="sm"
-                                        className="h-8 text-xs crystal-button text-primary-foreground"
+                                        className="h-8 text-xs crystal-button text-white"
                                     >
                                         Accept All
                                     </Button>
@@ -261,7 +283,7 @@ Your order has been confirmed..."
                                         onClick={handleDiscardAll}
                                         size="sm"
                                         variant="ghost"
-                                        className="h-8 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                        className="h-8 text-xs text-rose-500 hover:bg-rose-500/10 hover:text-rose-600"
                                     >
                                         Discard
                                     </Button>
@@ -293,7 +315,7 @@ Your order has been confirmed..."
                             <Button
                                 onClick={handleParse}
                                 disabled={isParsing || !emailText.trim()}
-                                className="w-full h-12 crystal-button text-primary-foreground font-semibold rounded-xl transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full h-12 crystal-button text-white font-semibold rounded-xl transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isParsing ? (
                                     <>
@@ -310,7 +332,7 @@ Your order has been confirmed..."
                             <Button
                                 onClick={handleManualEntry}
                                 variant="ghost"
-                                className="w-full h-10 text-xs text-muted-foreground hover:text-primary ghost-glow rounded-xl"
+                                className="w-full h-10 text-xs text-slate-500 hover:text-sky-600 ghost-glow rounded-xl"
                             >
                                 <Plus className="w-3.5 h-3.5 mr-1.5" />
                                 Manual Entry
@@ -321,7 +343,7 @@ Your order has been confirmed..."
                             <Button
                                 onClick={handleManualEntry}
                                 variant="outline"
-                                className="h-11 ghost-glow text-primary hover:text-primary rounded-xl text-xs"
+                                className="h-11 ghost-glow text-sky-600 hover:text-sky-700 rounded-xl text-xs"
                             >
                                 <Plus className="w-3.5 h-3.5 mr-1.5" />
                                 Add Manual
@@ -329,7 +351,7 @@ Your order has been confirmed..."
                             <Button
                                 onClick={handleClearAll}
                                 variant="outline"
-                                className="h-11 ghost-glow hover:border-muted-foreground/30 rounded-xl text-xs"
+                                className="h-11 ghost-glow hover:border-slate-400/30 rounded-xl text-xs"
                             >
                                 <X className="w-3.5 h-3.5 mr-1.5" />
                                 Clear
@@ -351,45 +373,45 @@ Your order has been confirmed..."
 
             {/* Duplicate Confirmation Dialog */}
             <AlertDialog open={duplicateDialogOpen} onOpenChange={setDuplicateDialogOpen}>
-                <AlertDialogContent className="glass-card border-orange-500/30">
+                <AlertDialogContent className="!bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-3xl !shadow-2xl">
                     <AlertDialogHeader>
-                        <AlertDialogTitle className="flex items-center gap-2 text-orange-400">
+                        <AlertDialogTitle className="flex items-center gap-2 text-amber-600">
                             <AlertTriangle className="w-5 h-5" />
                             Overwrite Existing Order?
                         </AlertDialogTitle>
-                        <AlertDialogDescription className="text-muted-foreground">
-                            An order with ID <span className="font-semibold text-foreground">{pendingOrder?.id}</span> already exists in the database.
+                        <AlertDialogDescription className="text-slate-600">
+                            An order with ID <span className="font-semibold text-slate-800">{pendingOrder?.id}</span> already exists in the database.
                             Do you want to overwrite it with the new data?
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     {pendingOrder && (
-                        <div className="glass-surface rounded-lg p-3 border border-orange-500/20 text-sm space-y-2">
+                        <div className="glass-surface rounded-xl p-3 border border-amber-400/20 text-sm space-y-2">
                             <div className="flex justify-between">
-                                <span className="text-muted-foreground">Supplier:</span>
-                                <span className="font-medium">{pendingOrder.supplier}</span>
+                                <span className="text-slate-500">Supplier:</span>
+                                <span className="font-medium text-slate-800">{pendingOrder.supplier}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-muted-foreground">Expected:</span>
-                                <span className="font-medium">{pendingOrder.expected_date || "—"}</span>
+                                <span className="text-slate-500">Expected:</span>
+                                <span className="font-medium text-slate-800">{pendingOrder.expected_date || "—"}</span>
                             </div>
                             <div>
-                                <span className="text-muted-foreground">Items:</span>
-                                <p className="mt-1 text-xs text-foreground/80">{pendingOrder.items}</p>
+                                <span className="text-slate-500">Items:</span>
+                                <p className="mt-1 text-xs text-slate-700">{pendingOrder.items}</p>
                             </div>
                         </div>
                     )}
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="ghost-glow">Cancel</AlertDialogCancel>
+                        <AlertDialogCancel className="ghost-glow rounded-xl">Cancel</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleConfirmOverwrite}
-                            className="bg-orange-500 hover:bg-orange-600 text-white"
+                            className="bg-amber-500 hover:bg-amber-600 text-white rounded-xl"
                         >
                             Overwrite
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </LiquidGlassCard>
     );
 }
 
@@ -408,92 +430,99 @@ function OrderCard({
     onEdit: () => void;
     onDiscard: () => void;
 }) {
-    const borderColor = isDuplicate ? "border-orange-500/20" : "border-emerald-500/20";
-    const hoverBorderColor = isDuplicate ? "hover:border-orange-500/40" : "hover:border-emerald-500/40";
-    const bgColor = isDuplicate ? "bg-orange-500/5" : "bg-emerald-500/5";
-    const borderBColor = isDuplicate ? "border-orange-500/10" : "border-emerald-500/10";
-    const badgeColor = isDuplicate ? "text-orange-400 border-orange-500/20" : "text-emerald-400 border-emerald-500/20";
-    const itemsBorderColor = isDuplicate ? "border-orange-500/10" : "border-emerald-500/10";
+    const borderColor = isDuplicate ? "border-amber-400/20" : "border-emerald-400/20";
+    const hoverBorderColor = isDuplicate ? "hover:border-amber-400/40" : "hover:border-emerald-400/40";
+    const bgColor = isDuplicate ? "bg-amber-500/5" : "bg-emerald-500/5";
+    const borderBColor = isDuplicate ? "border-amber-400/10" : "border-emerald-400/10";
+    const badgeColor = isDuplicate ? "text-amber-600 border-amber-400/20" : "text-emerald-600 border-emerald-400/20";
+    const itemsBorderColor = isDuplicate ? "border-amber-400/10" : "border-emerald-400/10";
 
     return (
-        <div className={`group rounded-xl glass-surface border ${borderColor} overflow-hidden transition-all ${hoverBorderColor} hover:glow-sm`}>
-            {/* Order header */}
-            <div className={`px-4 py-3 ${bgColor} border-b ${borderBColor} flex items-center justify-between`}>
-                <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold tracking-wider ${badgeColor} glass-surface px-2 py-0.5 rounded uppercase border`}>
-                        {isDuplicate ? "Duplicate" : "Detected"}
-                    </span>
-                    <span className="text-sm font-semibold text-foreground">{order.id}</span>
-                </div>
-                <StatusBadge status={order.status} />
-            </div>
-
-            {/* Order content */}
-            <div className="p-4 space-y-3">
-                <div className="grid grid-cols-2 gap-4 text-xs">
-                    <div>
-                        <span className="text-muted-foreground/70 text-[10px] uppercase tracking-wider font-semibold">Supplier</span>
-                        <p className="font-medium text-foreground mt-0.5 truncate">{order.supplier}</p>
+        <LiquidGlassCard
+            variant="default"
+            interactive={false}
+            glowOnHover={false}
+            className={`!rounded-xl ${borderColor} ${hoverBorderColor}`}
+        >
+            <div>
+                {/* Order header */}
+                <div className={`px-4 py-3 ${bgColor} border-b ${borderBColor} flex items-center justify-between`}>
+                    <div className="flex items-center gap-2">
+                        <span className={`text-[10px] font-bold tracking-wider ${badgeColor} glass-surface px-2 py-0.5 rounded uppercase border`}>
+                            {isDuplicate ? "Duplicate" : "Detected"}
+                        </span>
+                        <span className="text-sm font-semibold text-slate-800">{order.id}</span>
                     </div>
-                    <div>
-                        <span className="text-muted-foreground/70 text-[10px] uppercase tracking-wider font-semibold">Expected</span>
-                        <p className="font-medium text-foreground mt-0.5">{order.expected_date || "—"}</p>
+                    <StatusBadge status={order.status} />
+                </div>
+
+                {/* Order content */}
+                <div className="p-4 space-y-3">
+                    <div className="grid grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Supplier</span>
+                            <p className="font-medium text-slate-800 mt-0.5 truncate">{order.supplier}</p>
+                        </div>
+                        <div>
+                            <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Expected</span>
+                            <p className="font-medium text-slate-800 mt-0.5">{order.expected_date || "—"}</p>
+                        </div>
                     </div>
-                </div>
 
-                <div>
-                    <span className="text-muted-foreground/70 text-[10px] uppercase tracking-wider font-semibold">Items</span>
-                    <p className={`text-xs text-foreground/80 glass-surface rounded-lg p-2.5 mt-1 border ${itemsBorderColor} leading-relaxed`}>
-                        {order.items}
-                    </p>
-                </div>
-
-                {/* Additional Context */}
-                {order.additional_context && (
-                    <div className="flex gap-2 glass-surface p-2.5 rounded-lg border border-amber-500/20">
-                        <Info className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
-                        <p className="text-xs text-amber-400/90 leading-relaxed">
-                            {order.additional_context}
+                    <div>
+                        <span className="text-slate-500 text-[10px] uppercase tracking-wider font-semibold">Items</span>
+                        <p className={`text-xs text-slate-700 glass-surface rounded-xl p-2.5 mt-1 border ${itemsBorderColor} leading-relaxed`}>
+                            {order.items}
                         </p>
                     </div>
-                )}
 
-                {/* Action buttons */}
-                <div className={`flex gap-2 pt-2 border-t ${borderBColor}`}>
-                    <Button
-                        onClick={onAccept}
-                        size="sm"
-                        className={isDuplicate
-                            ? "flex-1 bg-orange-500 hover:bg-orange-600 text-white h-9 text-xs"
-                            : "flex-1 crystal-button text-primary-foreground h-9 text-xs"
-                        }
-                    >
-                        <Check className="w-3.5 h-3.5 mr-1.5" />
-                        {isDuplicate ? "Overwrite" : "Accept"}
-                    </Button>
-                    <div className="flex gap-1">
+                    {/* Additional Context */}
+                    {order.additional_context && (
+                        <div className="flex gap-2 glass-surface p-2.5 rounded-xl border border-amber-400/20">
+                            <Info className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-xs text-amber-600/90 leading-relaxed">
+                                {order.additional_context}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Action buttons */}
+                    <div className={`flex gap-2 pt-2 border-t ${borderBColor}`}>
                         <Button
-                            onClick={onEdit}
+                            onClick={onAccept}
                             size="sm"
-                            variant="ghost"
-                            className="h-9 w-9 p-0 text-primary hover:text-primary hover:bg-primary/10 rounded-lg"
-                            title="Edit"
+                            className={isDuplicate
+                                ? "flex-1 bg-amber-500 hover:bg-amber-600 text-white h-9 text-xs rounded-lg"
+                                : "flex-1 crystal-button text-white h-9 text-xs rounded-lg"
+                            }
                         >
-                            <Pencil className="w-3.5 h-3.5" />
+                            <Check className="w-3.5 h-3.5 mr-1.5" />
+                            {isDuplicate ? "Overwrite" : "Accept"}
                         </Button>
-                        <Button
-                            onClick={onDiscard}
-                            size="sm"
-                            variant="ghost"
-                            className="h-9 w-9 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg"
-                            title="Discard"
-                        >
-                            <X className="w-3.5 h-3.5" />
-                        </Button>
+                        <div className="flex gap-1">
+                            <Button
+                                onClick={onEdit}
+                                size="sm"
+                                variant="ghost"
+                                className="h-9 w-9 p-0 text-sky-600 hover:text-sky-700 hover:bg-sky-500/10 rounded-lg"
+                                title="Edit"
+                            >
+                                <Pencil className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button
+                                onClick={onDiscard}
+                                size="sm"
+                                variant="ghost"
+                                className="h-9 w-9 p-0 text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 rounded-lg"
+                                title="Discard"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </LiquidGlassCard>
     );
 }
 
@@ -509,7 +538,7 @@ function StatusBadge({ status }: { status: string }) {
             case "Shipment Delay":
                 return "status-shipment-delay";
             default:
-                return "glass-surface text-foreground";
+                return "glass-surface text-slate-700";
         }
     };
 
