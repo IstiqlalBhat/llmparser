@@ -286,7 +286,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     {/* Table header */}
                     <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/90 border-b border-white/50 text-xs font-extrabold text-slate-700 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
-                        <div className="col-span-1 flex items-center">
+                        <div className="col-span-1 flex items-center justify-center">
                             <Checkbox
                                 checked={isAllSelected}
                                 onCheckedChange={toggleSelectAll}
@@ -294,12 +294,12 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                 {...(isSomeSelected ? { "data-state": "indeterminate" } : {})}
                             />
                         </div>
-                        <div className="col-span-2">PO ID</div>
-                        <div className="col-span-2">Supplier</div>
-                        <div className="col-span-3">Items</div>
-                        <div className="col-span-2">Expected</div>
-                        <div className="col-span-2">Status</div>
-                        <div className="col-span-2">Actions</div>
+                        <div className="col-span-2 flex items-center">PO ID</div>
+                        <div className="col-span-2 flex items-center">Supplier</div>
+                        <div className="col-span-3 flex items-center">Items</div>
+                        <div className="col-span-2 flex items-center">Expected</div>
+                        <div className="col-span-2 flex items-center">Status</div>
+                        <div className="col-span-2 flex items-center justify-end">Actions</div>
                     </div>
 
                     {/* Table body */}
@@ -504,7 +504,7 @@ function OrderRow({
             {/* Desktop layout */}
             <div className="hidden lg:grid lg:grid-cols-14 gap-4 items-center">
                 {/* Checkbox */}
-                <div className="col-span-1">
+                <div className="col-span-1 flex items-center justify-center">
                     <Checkbox
                         checked={isSelected}
                         onCheckedChange={onToggleSelect}
@@ -513,22 +513,22 @@ function OrderRow({
                 </div>
 
                 {/* PO ID */}
-                <div className="col-span-2">
+                <div className="col-span-2 flex items-center">
                     <span className="font-mono text-sm font-semibold text-slate-800/90">
                         {order.id}
                     </span>
                 </div>
 
                 {/* Supplier */}
-                <div className="col-span-2 flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl glass-surface flex items-center justify-center flex-shrink-0 border border-white/50">
+                <div className="col-span-2 flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg glass-surface flex items-center justify-center flex-shrink-0 border border-white/50">
                         <Building2 className="w-4 h-4 text-slate-500" />
                     </div>
                     <span className="text-sm truncate font-medium text-slate-800">{order.supplier}</span>
                 </div>
 
                 {/* Items */}
-                <div className="col-span-3">
+                <div className="col-span-3 flex items-center">
                     <p className="text-sm text-slate-700 truncate" title={order.items}>
                         {order.items}
                     </p>
@@ -541,7 +541,7 @@ function OrderRow({
                 </div>
 
                 {/* Status */}
-                <div className="col-span-2">
+                <div className="col-span-2 flex items-center">
                     <Select
                         defaultValue={order.status}
                         onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
@@ -568,14 +568,14 @@ function OrderRow({
                 </div>
 
                 {/* Actions */}
-                <div className="col-span-2 flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                <div className="col-span-2 flex items-center justify-end gap-1">
                     {order.additional_context && (
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8 text-amber-500 hover:text-amber-600 hover:bg-amber-500/10 rounded-lg"
+                                    className="h-8 w-8 text-amber-600 hover:text-amber-700 hover:bg-amber-500/20 rounded-lg"
                                 >
                                     <FileText className="w-4 h-4" />
                                 </Button>
@@ -597,7 +597,7 @@ function OrderRow({
                         variant="ghost"
                         size="icon"
                         onClick={onEdit}
-                        className="h-8 w-8 text-slate-500 hover:text-sky-600 hover:bg-sky-500/10 rounded-lg"
+                        className="h-8 w-8 text-sky-600 hover:text-sky-700 hover:bg-sky-500/20 rounded-lg"
                     >
                         <Pencil className="w-4 h-4" />
                     </Button>
@@ -605,7 +605,7 @@ function OrderRow({
                         variant="ghost"
                         size="icon"
                         onClick={onDelete}
-                        className="h-8 w-8 text-slate-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg"
+                        className="h-8 w-8 text-rose-600 hover:text-rose-700 hover:bg-rose-500/20 rounded-lg"
                     >
                         <Trash2 className="w-4 h-4" />
                     </Button>
@@ -638,7 +638,7 @@ function OrderRow({
                             variant="ghost"
                             size="icon"
                             onClick={onEdit}
-                            className="h-8 w-8 text-slate-500/70 hover:text-sky-600 hover:bg-sky-500/10 rounded-lg touch-manipulation"
+                            className="h-8 w-8 text-sky-600 hover:text-sky-700 hover:bg-sky-500/20 rounded-lg touch-manipulation"
                         >
                             <Pencil className="w-4 h-4" />
                         </Button>
@@ -646,7 +646,7 @@ function OrderRow({
                             variant="ghost"
                             size="icon"
                             onClick={onDelete}
-                            className="h-8 w-8 text-slate-500/70 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg touch-manipulation"
+                            className="h-8 w-8 text-rose-600 hover:text-rose-700 hover:bg-rose-500/20 rounded-lg touch-manipulation"
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
