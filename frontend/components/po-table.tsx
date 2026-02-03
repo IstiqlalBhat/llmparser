@@ -297,7 +297,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                             <SelectValue placeholder="Status" />
                                         </div>
                                     </SelectTrigger>
-                                    <SelectContent className="!bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-2xl !shadow-xl">
+                                    <SelectContent className="!bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-2xl !shadow-xl" position="popper" sideOffset={4}>
                                         <SelectItem value={ALL_STATUSES}>All Statuses</SelectItem>
                                         {Object.entries(statusConfig).map(([status, config]) => (
                                             <SelectItem key={status} value={status}>
@@ -422,11 +422,11 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                     {orderToDelete && (
                         <div className="rounded-xl glass-surface border border-white/50 p-4 space-y-3 my-2">
                             <div className="flex items-center justify-between">
-                                <span 
-                                  className="text-sm font-semibold text-slate-800"
-                                  style={{ fontFamily: "var(--font-mono)" }}
+                                <span
+                                    className="text-sm font-semibold text-slate-800"
+                                    style={{ fontFamily: "var(--font-mono)" }}
                                 >
-                                  {orderToDelete.id}
+                                    {orderToDelete.id}
                                 </span>
                                 <StatusBadge status={orderToDelete.status} />
                             </div>
@@ -490,11 +490,11 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                 className="!p-3"
                             >
                                 <div className="flex items-center justify-between">
-                                    <span 
-                                      className="text-sm font-medium text-slate-800"
-                                      style={{ fontFamily: "var(--font-mono)" }}
+                                    <span
+                                        className="text-sm font-medium text-slate-800"
+                                        style={{ fontFamily: "var(--font-mono)" }}
                                     >
-                                      {order.id}
+                                        {order.id}
                                     </span>
                                     <span className="text-sm text-slate-500 truncate max-w-[150px]">
                                         {order.supplier}
@@ -685,11 +685,11 @@ function OrderRow({
                             className="w-5 h-5 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 touch-manipulation"
                         />
                         <div>
-                            <span 
-                              className="text-sm font-bold text-slate-800"
-                              style={{ fontFamily: "var(--font-mono)" }}
+                            <span
+                                className="text-sm font-bold text-slate-800"
+                                style={{ fontFamily: "var(--font-mono)" }}
                             >
-                              {order.id}
+                                {order.id}
                             </span>
                             <div className="flex items-center gap-2 mt-0.5 min-w-0">
                                 <Building2 className="w-3 h-3 text-slate-500" />
