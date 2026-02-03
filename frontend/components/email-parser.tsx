@@ -24,7 +24,7 @@ interface EmailParserProps {
     onOrderParsed: (order: PurchaseOrder) => void;
 }
 
-// Fun loading messages that rotate during parsing
+// Fun loading messages that rotate during parsing (in order)
 const loadingMessages = [
     "Analyzing content...",
     "Teaching AI to read emails...",
@@ -40,8 +40,10 @@ const loadingMessages = [
     "Consulting the oracle...",
     "Negotiating with databases...",
     "Performing AI magic...",
-    "Almost there, promise!",
 ];
+
+// Final message shown after all others have cycled
+const finalMessage = "Almost there, promise!";
 
 export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const [emailText, setEmailText] = useState("");
@@ -50,6 +52,7 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const [parseErrors, setParseErrors] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+    const [showFinalMessage, setShowFinalMessage] = useState(false);
 
     // Edit State
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -65,12 +68,21 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
     useEffect(() => {
         if (!isParsing) {
             setLoadingMessageIndex(0);
+            setShowFinalMessage(false);
             return;
         }
 
         const interval = setInterval(() => {
-            setLoadingMessageIndex(prev => (prev + 1) % loadingMessages.length);
-        }, 2000);
+            setLoadingMessageIndex(prev => {
+                const nextIndex = prev + 1;
+                // After cycling through all messages, show final message
+                if (nextIndex >= loadingMessages.length) {
+                    setShowFinalMessage(true);
+                    return prev; // Stay on last index
+                }
+                return nextIndex;
+            });
+        }, 1800); // Slightly faster to reach "Almost there" sooner
 
         return () => clearInterval(interval);
     }, [isParsing]);
@@ -251,10 +263,10 @@ Your order has been confirmed..."
                             <div className="flex items-center space-x-2.5">
                                 <Loader2 className="w-4 h-4 text-sky-600 animate-spin" />
                                 <span
-                                    key={loadingMessageIndex}
+                                    key={showFinalMessage ? 'final' : loadingMessageIndex}
                                     className="text-sm font-medium text-sky-600 animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
                                 >
-                                    {loadingMessages[loadingMessageIndex]}
+                                    {showFinalMessage ? finalMessage : loadingMessages[loadingMessageIndex]}
                                 </span>
                             </div>
                         </div>
