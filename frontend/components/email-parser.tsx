@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Sparkles, Check, X, Mail, Cpu, FileText, Info, Pencil, Plus, AlertTriangle } from "lucide-react";
@@ -24,12 +24,32 @@ interface EmailParserProps {
     onOrderParsed: (order: PurchaseOrder) => void;
 }
 
+// Fun loading messages that rotate during parsing
+const loadingMessages = [
+    "Analyzing content...",
+    "Teaching AI to read emails...",
+    "Decoding supplier hieroglyphics...",
+    "Bribing the parsing gods...",
+    "Untangling email spaghetti...",
+    "Asking ChatGPT nicely...",
+    "Converting coffee to code...",
+    "Summoning data wizards...",
+    "Translating corporate speak...",
+    "Mining for PO numbers...",
+    "Wrangling rogue semicolons...",
+    "Consulting the oracle...",
+    "Negotiating with databases...",
+    "Performing AI magic...",
+    "Almost there, promise!",
+];
+
 export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const [emailText, setEmailText] = useState("");
     const [isParsing, setIsParsing] = useState(false);
     const [parsedOrders, setParsedOrders] = useState<PurchaseOrder[]>([]);
     const [parseErrors, setParseErrors] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
 
     // Edit State
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -40,6 +60,20 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
     const [existingIds, setExistingIds] = useState<Set<string>>(new Set());
     const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false);
     const [pendingOrder, setPendingOrder] = useState<PurchaseOrder | null>(null);
+
+    // Rotate loading messages while parsing
+    useEffect(() => {
+        if (!isParsing) {
+            setLoadingMessageIndex(0);
+            return;
+        }
+
+        const interval = setInterval(() => {
+            setLoadingMessageIndex(prev => (prev + 1) % loadingMessages.length);
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [isParsing]);
 
     const handleParse = async () => {
         if (!emailText.trim()) return;
@@ -216,7 +250,12 @@ Your order has been confirmed..."
                             </LiquidGlassCard>
                             <div className="flex items-center space-x-2.5">
                                 <Loader2 className="w-4 h-4 text-sky-600 animate-spin" />
-                                <span className="text-sm font-medium text-sky-600">Analyzing content...</span>
+                                <span
+                                    key={loadingMessageIndex}
+                                    className="text-sm font-medium text-sky-600 animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
+                                >
+                                    {loadingMessages[loadingMessageIndex]}
+                                </span>
                             </div>
                         </div>
                     )}
