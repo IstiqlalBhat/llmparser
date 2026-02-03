@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
     Select,
     SelectContent,
@@ -24,6 +24,12 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { cn } from "@/lib/utils";
 import { OrderStatus, PurchaseOrder } from "@/types";
 import {
     Search,
@@ -58,27 +64,27 @@ const ALL_STATUSES = "all";
 const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; bgClass: string; borderClass: string }> = {
     "On Track": {
         icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-        color: "text-emerald-600 drop-shadow-[0_0_2px_rgba(16,185,129,0.3)]",
-        bgClass: "bg-emerald-500/15",
-        borderClass: "border-emerald-500/40",
+        color: "text-emerald-700",
+        bgClass: "bg-emerald-200/35",
+        borderClass: "border-emerald-300/60",
     },
     "Shipped": {
         icon: <Truck className="w-3.5 h-3.5" />,
-        color: "text-sky-600 drop-shadow-[0_0_2px_rgba(14,165,233,0.3)]",
-        bgClass: "bg-sky-500/15",
-        borderClass: "border-sky-500/40",
+        color: "text-sky-700",
+        bgClass: "bg-sky-200/35",
+        borderClass: "border-sky-300/60",
     },
     "Product Delays": {
         icon: <AlertTriangle className="w-3.5 h-3.5" />,
-        color: "text-amber-600 drop-shadow-[0_0_2px_rgba(245,158,11,0.3)]",
-        bgClass: "bg-amber-500/15",
-        borderClass: "border-amber-500/40",
+        color: "text-amber-700",
+        bgClass: "bg-amber-200/35",
+        borderClass: "border-amber-300/60",
     },
     "Shipment Delay": {
         icon: <Clock className="w-3.5 h-3.5" />,
-        color: "text-rose-600 drop-shadow-[0_0_2px_rgba(239,68,68,0.3)]",
-        bgClass: "bg-rose-500/15",
-        borderClass: "border-rose-500/40",
+        color: "text-rose-700",
+        bgClass: "bg-rose-200/35",
+        borderClass: "border-rose-300/60",
     },
 };
 
@@ -89,6 +95,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [orderToDelete, setOrderToDelete] = useState<PurchaseOrder | null>(null);
     const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
+    const tableScrollRef = useRef<HTMLDivElement>(null);
 
     const filteredOrders = useMemo(() => {
         return orders.filter((order) => {
@@ -103,6 +110,29 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
             return matchesSearch && matchesStatus;
         });
     }, [orders, searchQuery, statusFilter]);
+
+    useEffect(() => {
+        const container = tableScrollRef.current;
+        if (!container) return;
+
+        const items = Array.from(container.querySelectorAll<HTMLElement>("[data-row]"));
+        items.forEach((item) => item.classList.remove("is-visible"));
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { root: container, threshold: 0.15 }
+        );
+
+        items.forEach((item) => observer.observe(item));
+        return () => observer.disconnect();
+    }, [filteredOrders]);
 
     const clearFilters = () => {
         setSearchQuery("");
@@ -167,7 +197,8 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 variant="large"
                 interactive={false}
                 glowOnHover={false}
-                className="h-full flex flex-col min-h-[600px]"
+                className="flex flex-col h-[72vh] min-h-[420px] max-h-[720px] sm:min-h-[480px] lg:min-h-[560px] xl:h-[clamp(600px,70vh,760px)] xl:max-h-none"
+                contentClassName="flex flex-col h-full min-h-0"
             >
                 {/* Header */}
                 <div className="px-4 py-5 sm:px-6 border-b border-white/40 relative overflow-hidden shrink-0">
@@ -220,18 +251,31 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                             {/* Mobile Select All Button */}
                             {filteredOrders.length > 0 && (
                                 <Button
+                                    asChild
                                     variant="outline"
                                     size="sm"
-                                    onClick={toggleSelectAll}
                                     className="lg:hidden border-sky-400/30 text-sky-600 hover:bg-sky-500/10 hover:border-sky-400/50 h-10 rounded-xl touch-manipulation"
                                 >
-                                    <Checkbox
-                                        checked={isAllSelected}
-                                        onCheckedChange={toggleSelectAll}
-                                        className="w-5 h-5 mr-2 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 pointer-events-none"
-                                        {...(isSomeSelected ? { "data-state": "indeterminate" } : {})}
-                                    />
-                                    {isAllSelected ? "Deselect All" : "Select All"}
+                                    <div
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={toggleSelectAll}
+                                        onKeyDown={(event) => {
+                                            if (event.key === "Enter" || event.key === " ") {
+                                                event.preventDefault();
+                                                toggleSelectAll();
+                                            }
+                                        }}
+                                        className="flex items-center justify-center w-full"
+                                    >
+                                        <Checkbox
+                                            checked={isAllSelected}
+                                            onCheckedChange={toggleSelectAll}
+                                            className="w-5 h-5 mr-2 data-[state=checked]:bg-sky-500 data-[state=checked]:border-sky-500 pointer-events-none"
+                                            {...(isSomeSelected ? { "data-state": "indeterminate" } : {})}
+                                        />
+                                        {isAllSelected ? "Deselect All" : "Select All"}
+                                    </div>
                                 </Button>
                             )}
 
@@ -283,7 +327,10 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                 </div>
 
                 {/* Table Content */}
-                <div className="overflow-auto flex-1 custom-scrollbar">
+                <div
+                    ref={tableScrollRef}
+                    className="overflow-y-auto flex-1 min-h-0 custom-scrollbar table-scroll-area overscroll-contain touch-pan-y"
+                >
                     {/* Table header */}
                     <div className="hidden lg:grid lg:grid-cols-14 gap-4 px-6 py-3.5 bg-slate-100/90 border-b border-white/50 text-xs font-extrabold text-slate-700 uppercase tracking-wide sticky top-0 backdrop-blur-md z-10">
                         <div className="col-span-1 flex items-center justify-center">
@@ -495,9 +542,10 @@ function OrderRow({
 
     return (
         <div
-            className={`group px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 border-l-2 ${isSelected
-                    ? 'bg-sky-500/5 border-l-sky-500'
-                    : 'hover:bg-sky-500/5 border-l-transparent'
+            data-row
+            className={`group row-reveal px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 border-l-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${isSelected
+                    ? 'bg-sky-200/25 border-l-sky-500'
+                    : 'bg-white/25 hover:bg-white/35 border-l-transparent'
                 }`}
             style={{ animationDelay: `${index * 0.05}s` }}
         >
@@ -520,18 +568,26 @@ function OrderRow({
                 </div>
 
                 {/* Supplier */}
-                <div className="col-span-2 flex items-center gap-2">
+                <div className="col-span-2 flex items-center gap-2 min-w-0">
                     <div className="w-8 h-8 rounded-lg glass-surface flex items-center justify-center flex-shrink-0 border border-white/50">
                         <Building2 className="w-4 h-4 text-slate-500" />
                     </div>
-                    <span className="text-sm truncate font-medium text-slate-800">{order.supplier}</span>
+                    <TextReveal
+                        label="Supplier"
+                        text={order.supplier}
+                        triggerClassName="text-sm font-semibold text-slate-800 truncate"
+                        contentClassName="w-[min(420px,calc(100vw-24px))]"
+                    />
                 </div>
 
                 {/* Items */}
-                <div className="col-span-3 flex items-center">
-                    <p className="text-sm text-slate-700 truncate" title={order.items}>
-                        {order.items}
-                    </p>
+                <div className="col-span-3 flex items-center min-w-0">
+                    <TextReveal
+                        label="Items"
+                        text={order.items}
+                        triggerClassName="text-sm text-slate-700 leading-snug line-clamp-2"
+                        contentClassName="w-[min(520px,calc(100vw-24px))]"
+                    />
                 </div>
 
                 {/* Expected Date */}
@@ -546,11 +602,11 @@ function OrderRow({
                         defaultValue={order.status}
                         onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
                     >
-                        <SelectTrigger className={`w-full h-9 ${config.bgClass} ${config.borderClass} border rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-sky-500/10`}>
+                        <SelectTrigger className={`w-full h-9 ${config.bgClass} ${config.borderClass} border rounded-xl transition-all duration-200 shadow-sm backdrop-blur-md hover:shadow-md`}>
                             <SelectValue>
                                 <div className="flex items-center gap-2">
                                     <span className={config.color}>{config.icon}</span>
-                                    <span className={`text-xs font-semibold ${config.color}`}>{order.status}</span>
+                                    <span className={`text-xs font-bold ${config.color}`}>{order.status}</span>
                                 </div>
                             </SelectValue>
                         </SelectTrigger>
@@ -568,18 +624,18 @@ function OrderRow({
                 </div>
 
                 {/* Actions */}
-                <div className="col-span-2 flex items-center justify-end gap-1">
-                    {order.additional_context && (
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8 text-amber-600 hover:text-amber-700 hover:bg-amber-500/20 rounded-lg"
-                                >
-                                    <FileText className="w-4 h-4" />
-                                </Button>
-                            </PopoverTrigger>
+                    <div className="col-span-2 flex items-center justify-end gap-1">
+                        {order.additional_context && (
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 text-amber-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-amber-800 hover:bg-white/45 rounded-lg"
+                                    >
+                                        <FileText className="w-4 h-4" />
+                                    </Button>
+                                </PopoverTrigger>
                             <PopoverContent className="w-80 p-0 !bg-white/85 !backdrop-blur-2xl !border-white/60 !rounded-2xl !shadow-xl ml-4">
                                 <div className="bg-amber-500/10 px-4 py-3 border-b border-amber-400/20 rounded-t-2xl">
                                     <div className="flex items-center gap-2">
@@ -597,7 +653,7 @@ function OrderRow({
                         variant="ghost"
                         size="icon"
                         onClick={onEdit}
-                        className="h-8 w-8 text-sky-600 hover:text-sky-700 hover:bg-sky-500/20 rounded-lg"
+                        className="h-8 w-8 text-sky-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-sky-800 hover:bg-white/45 rounded-lg"
                     >
                         <Pencil className="w-4 h-4" />
                     </Button>
@@ -605,7 +661,7 @@ function OrderRow({
                         variant="ghost"
                         size="icon"
                         onClick={onDelete}
-                        className="h-8 w-8 text-rose-600 hover:text-rose-700 hover:bg-rose-500/20 rounded-lg"
+                        className="h-8 w-8 text-rose-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-rose-800 hover:bg-white/45 rounded-lg"
                     >
                         <Trash2 className="w-4 h-4" />
                     </Button>
@@ -613,7 +669,7 @@ function OrderRow({
             </div>
 
             {/* Mobile / Tablet layout */}
-            <div className="lg:hidden flex flex-col gap-3">
+                <div className="lg:hidden flex flex-col gap-3">
                 {/* Row 1: Checkbox, ID, Actions */}
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -626,9 +682,14 @@ function OrderRow({
                             <span className="font-mono text-sm font-bold text-slate-800">
                                 {order.id}
                             </span>
-                            <div className="flex items-center gap-2 mt-0.5">
+                            <div className="flex items-center gap-2 mt-0.5 min-w-0">
                                 <Building2 className="w-3 h-3 text-slate-500" />
-                                <span className="text-xs font-medium text-slate-500">{order.supplier}</span>
+                                <TextReveal
+                                    label="Supplier"
+                                    text={order.supplier}
+                                    triggerClassName="text-xs font-medium text-slate-600 truncate"
+                                    contentClassName="w-[min(420px,calc(100vw-24px))]"
+                                />
                             </div>
                         </div>
                     </div>
@@ -638,7 +699,7 @@ function OrderRow({
                             variant="ghost"
                             size="icon"
                             onClick={onEdit}
-                            className="h-8 w-8 text-sky-600 hover:text-sky-700 hover:bg-sky-500/20 rounded-lg touch-manipulation"
+                            className="h-8 w-8 text-sky-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-sky-800 hover:bg-white/45 rounded-lg touch-manipulation"
                         >
                             <Pencil className="w-4 h-4" />
                         </Button>
@@ -646,7 +707,7 @@ function OrderRow({
                             variant="ghost"
                             size="icon"
                             onClick={onDelete}
-                            className="h-8 w-8 text-rose-600 hover:text-rose-700 hover:bg-rose-500/20 rounded-lg touch-manipulation"
+                            className="h-8 w-8 text-rose-700 bg-white/35 border border-white/60 shadow-sm backdrop-blur-md hover:text-rose-800 hover:bg-white/45 rounded-lg touch-manipulation"
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -656,7 +717,12 @@ function OrderRow({
                 {/* Row 2: Items (Clamped) */}
                 <div className="glass-surface rounded-xl p-3 text-sm text-slate-800/90 border border-white/50">
                     <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">Items</span>
-                    <p className="line-clamp-2 leading-relaxed">{order.items}</p>
+                    <TextReveal
+                        label="Items"
+                        text={order.items}
+                        triggerClassName="line-clamp-2 leading-relaxed text-left"
+                        contentClassName="w-[min(520px,calc(100vw-24px))]"
+                    />
                 </div>
 
                 {/* Row 3: Meta & Status */}
@@ -672,10 +738,10 @@ function OrderRow({
                                 defaultValue={order.status}
                                 onValueChange={(value) => onStatusUpdate(order.id, value as OrderStatus)}
                             >
-                                <SelectTrigger className={`w-full h-10 text-xs ${config.bgClass} ${config.borderClass} border rounded-xl touch-manipulation active:scale-[0.98] transition-transform`}>
+                                <SelectTrigger className={`w-full h-10 text-xs ${config.bgClass} ${config.borderClass} border rounded-xl touch-manipulation active:scale-[0.98] transition-transform shadow-sm backdrop-blur-md`}>
                                     <div className="flex items-center gap-2 overflow-hidden">
                                         <span className={config.color}>{config.icon}</span>
-                                        <span className={`font-semibold truncate ${config.color}`}>{order.status}</span>
+                                        <span className={`font-bold truncate ${config.color}`}>{order.status}</span>
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent
@@ -707,6 +773,67 @@ function OrderRow({
                 )}
             </div>
         </div>
+    );
+}
+
+function TextReveal({
+    label,
+    text,
+    triggerClassName,
+    contentClassName,
+}: {
+    label: string;
+    text: string;
+    triggerClassName: string;
+    contentClassName?: string;
+}) {
+    if (!text) {
+        return <span className={triggerClassName}>—</span>;
+    }
+
+    return (
+        <HoverCard openDelay={200} closeDelay={150}>
+            <HoverCardTrigger asChild>
+                <button
+                    type="button"
+                    className={cn(
+                        "min-w-0 w-full text-left bg-transparent p-0 outline-none cursor-pointer",
+                        "hover:text-sky-600 transition-colors duration-200",
+                        "focus-visible:ring-2 focus-visible:ring-sky-400/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+                        triggerClassName
+                    )}
+                >
+                    {text}
+                </button>
+            </HoverCardTrigger>
+            <HoverCardContent
+                side="top"
+                align="start"
+                sideOffset={8}
+                className={cn(
+                    "p-0 rounded-2xl border border-white/50 overflow-hidden",
+                    contentClassName
+                )}
+                style={{
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.75) 100%)",
+                    backdropFilter: "blur(32px) saturate(180%)",
+                    WebkitBackdropFilter: "blur(32px) saturate(180%)",
+                    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+                }}
+            >
+                {/* Header bar */}
+                <div className="px-4 py-2.5 border-b border-white/40 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+                    <span className="text-[10px] font-extrabold tracking-[0.18em] uppercase text-slate-600">
+                        {label}
+                    </span>
+                </div>
+                {/* Content */}
+                <div className="p-4 text-sm text-slate-800 font-medium leading-relaxed max-h-60 overflow-y-auto custom-scrollbar break-words">
+                    {text}
+                </div>
+            </HoverCardContent>
+        </HoverCard>
     );
 }
 

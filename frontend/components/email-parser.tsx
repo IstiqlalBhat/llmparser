@@ -147,8 +147,8 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
             variant="large"
             interactive={false}
             glowOnHover={false}
-            className="flex-col h-full min-h-[600px]"
-            contentClassName="flex flex-col h-full"
+            className="flex-col h-[72vh] min-h-[420px] max-h-[720px] sm:min-h-[480px] lg:min-h-[560px] xl:h-[clamp(600px,70vh,760px)] xl:max-h-none"
+            contentClassName="flex flex-col h-full min-h-0"
         >
             {/* Header */}
             <div className="px-5 py-5 border-b border-white/40 relative overflow-hidden shrink-0">
