@@ -82,7 +82,7 @@ export function EmailParser({ onOrderParsed }: EmailParserProps) {
                 }
                 return nextIndex;
             });
-        }, 1800); // Slightly faster to reach "Almost there" sooner
+        }, 2800); // ~3 seconds per message for better readability
 
         return () => clearInterval(interval);
     }, [isParsing]);
@@ -252,7 +252,7 @@ Your order has been confirmed..."
 
                     {/* Loading Overlay */}
                     {isParsing && (
-                        <div className="absolute inset-0 z-10 glass-surface rounded-xl flex flex-col items-center justify-center">
+                        <div className="absolute inset-0 z-10 bg-white/70 backdrop-blur-xl rounded-xl flex flex-col items-center justify-center">
                             <LiquidGlassCard
                                 variant="stat"
                                 interactive={false}
