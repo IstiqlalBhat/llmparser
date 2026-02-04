@@ -92,6 +92,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<string>(ALL_STATUSES);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set());
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [orderToDelete, setOrderToDelete] = useState<PurchaseOrder | null>(null);
     const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
@@ -115,16 +116,29 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
         const container = tableScrollRef.current;
         if (!container) return;
 
-        const items = Array.from(container.querySelectorAll<HTMLElement>("[data-row]"));
-        items.forEach((item) => item.classList.remove("is-visible"));
+        setVisibleIds(new Set());
+
+        const items = Array.from(container.querySelectorAll<HTMLElement>("[data-row-id]"));
 
         const observer = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("is-visible");
-                        observer.unobserve(entry.target);
-                    }
+                setVisibleIds((prev) => {
+                    let next = prev;
+                    let changed = false;
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const id = (entry.target as HTMLElement).dataset.rowId;
+                            if (id && !prev.has(id)) {
+                                if (next === prev) {
+                                    next = new Set(prev);
+                                }
+                                next.add(id);
+                                changed = true;
+                            }
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                    return changed ? next : prev;
                 });
             },
             { root: container, threshold: 0.15 }
@@ -382,6 +396,7 @@ export function POTable({ orders, onStatusUpdate, onEdit, onDelete, onDeleteMany
                                         order={order}
                                         index={index}
                                         isSelected={selectedIds.has(order.id)}
+                                        isVisible={visibleIds.has(order.id)}
                                         onToggleSelect={() => toggleSelect(order.id)}
                                         onStatusUpdate={onStatusUpdate}
                                         onEdit={() => onEdit(order)}
@@ -530,6 +545,7 @@ function OrderRow({
     order,
     index,
     isSelected,
+    isVisible,
     onToggleSelect,
     onStatusUpdate,
     onEdit,
@@ -538,6 +554,7 @@ function OrderRow({
     order: PurchaseOrder;
     index: number;
     isSelected: boolean;
+    isVisible: boolean;
     onToggleSelect: () => void;
     onStatusUpdate: (id: string, status: OrderStatus) => void;
     onEdit: () => void;
@@ -547,8 +564,8 @@ function OrderRow({
 
     return (
         <div
-            data-row
-            className={`group row-reveal px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 border-l-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${isSelected
+            data-row-id={order.id}
+            className={`group row-reveal ${isVisible ? "is-visible" : ""} px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 border-l-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${isSelected
                 ? 'bg-sky-200/15 border-l-sky-500'
                 : 'bg-white/15 hover:bg-white/25 border-l-transparent'
                 }`}
