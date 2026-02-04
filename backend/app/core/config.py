@@ -7,7 +7,7 @@ from typing import Optional
 class Settings(BaseSettings):
     PROJECT_NAME: str = "PO Management System"
     GEMINI_API_KEY: str
-    GEMINI_MODEL_NAME: str = "gemini-2.0-flash"
+    GEMINI_MODEL_NAME: str = "gemini-3-flash-preview"
     # Allow all origins for local development/mobile testing
     CORS_ORIGINS: list[str] = ["*"]
 
